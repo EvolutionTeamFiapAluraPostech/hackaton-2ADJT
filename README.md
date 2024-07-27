@@ -110,9 +110,9 @@ O objetivo deste microsserviço é realizar a autenticação do usuário e forne
 
     ![alt text](./img/usuarios_arquitetura.png)
 
-    200 testes de integração e unidade, executados em 6 segudos, com 94% de classes e 89% de linhas de código cobertas.
+    31 testes de integração e unidade, executados em 2 segudos, com 100% de classes e 84% de linhas de código cobertas.
 
-    ![alt text](./img/image-19.png)
+    ![alt text](./img/usuario_cobertura_testes.png)
 
 # Qualidade de software
 Para garantir a qualidade de software, foram implementados testes de unidade e de integração na grande maioria do código e teste de design arquitetural do projeto com o ArchUnit. Para identificar o que foi testado, utilizamos a cobertura de testes de código do próprio IntelliJ IDEA e o ArchUnit. O ArchUnit foi utilizado para identificar através de um teste a existência de testes correspondentes para as classes de serviço, use case, validators, identifica se as classes foram criadas respeitando a arquitetura/design do projeto (cada classe deverá ser criada em sua respectiva pasta, conforme seu objetivo, não é permitido injetar repositories em classes indevidas, métodos de use case que executam operações de escrita em banco de dados devem ser anotadas com @Transactional).

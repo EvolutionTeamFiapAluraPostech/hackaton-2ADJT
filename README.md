@@ -68,7 +68,7 @@ Segue abaixo instruções do endpoint para se autenticar na aplicação.
 # Documentação do PROJETO
 O projeto está dividido em 4 containers de microsserviços backend Java Spring Boot e outros 4 containers de banco de dados Postgresql. Cada um dos microsserviços possui seu respectivo banco de dados.
 
-O backend foi implementado seguindo as recomendações da Clean Architecture, com Clean Code, SOLID e testes automatizados (de unidade e integração), seguindo os princípios do FIRST e Clean Tests. 
+O backend foi implementado seguindo as recomendações da Clean Architecture, com Clean Code, princípios SOLID/YAGNI/KISS e testes automatizados (de unidade e integração), seguindo os princípios do FIRST e Clean Tests. 
 
 # Comunicação entre os microsserviços
 
@@ -82,7 +82,7 @@ O backend foi implementado seguindo as recomendações da Clean Architecture, co
 
 ![alt text](./img/comunicacao_entre_microsservicos.png)
 
-# Microsserviço de usuários
+# Microsserviço de usuários - API
 O objetivo deste microsserviço é realizar a autenticação do usuário e fornecer um JWT token de acesso. O cadastro do usuário será realizado via flyway migration, inserindo o usuário sugerido pelos professores.
 * http://localhost:8080/api/autenticacao
     * Verbo POST - para realizar a autenticação do usuário já cadastrado.
@@ -108,16 +108,28 @@ O objetivo deste microsserviço é realizar a autenticação do usuário e forne
     * Documentação da API: http://localhost:8080/swagger-ui/index.html
     * Banco de dados: http://localhost:5432/usuarios-db
 
-    ![alt text](./img/usuarios_arquitetura.png)
+# Microsserviço de usuários - Clean Architecture e Entity Diagram
 
-    31 testes de integração e unidade, executados em 2 segudos, com 100% de classes e 84% de linhas de código cobertas.
+![alt text](./img/usuarios_arquitetura.png)
 
-    ![alt text](./img/usuario_cobertura_testes.png)
+# Microsserviço de usuários - Resultado dos testes
+
+31 testes de integração e unidade, executados em 2 segudos, com 100% de classes e 84% de linhas de código cobertas.
+
+![alt text](./img/usuario_cobertura_testes.png)
+
+# Clean Architecture
+
+![alt text](./img/Clean_Architecture.png)
+
+As aplicações desenvolvidas neste projeto utilizam a Clean Architecture, onde as regras de negócio concentram-se no centro da "cebola" (como mostra a imagem acima denominada *Domain*), totalmente independentes de bibliotecas ligadas a infraestrutura. 
+Na camada *Domain* estão contidas classes do tipo Entity, Value Objects, Exceptions lançadas por regras de negócio e outras classes auxiliares vinculadas ao negócio.
+Na camada *Application* estão contidas as abstrações (interfaces) que conhecem e se relacionam com classes da camada *Domain*.
+Na camada *Presentation* temos as implementações das interfaces encontradas na camada *Application*. Aqui estão as classes do Spring Framework que entregam ao desenvolvedor classes com comportamentos para interagir com a *Infraestrutura*.
+Observe que as classes contidas na camada *Presentation* não conhecem as classes contidas na camada *Domain*, tornando-as desacopladas do conhecimento de regras de negócio.
 
 # Qualidade de software
 Para garantir a qualidade de software, foram implementados testes de unidade e de integração na grande maioria do código e teste de design arquitetural do projeto com o ArchUnit. Para identificar o que foi testado, utilizamos a cobertura de testes de código do próprio IntelliJ IDEA e o ArchUnit. O ArchUnit foi utilizado para identificar através de um teste a existência de testes correspondentes para as classes de serviço, use case, validators, identifica se as classes foram criadas respeitando a arquitetura/design do projeto (cada classe deverá ser criada em sua respectiva pasta, conforme seu objetivo, não é permitido injetar repositories em classes indevidas, métodos de use case que executam operações de escrita em banco de dados devem ser anotadas com @Transactional).
 Os testes de unidade foram implementados nas classes de domínio e application testando a menor unidade de código. Os testes de integração foram implementados nas classes de presentation, realizando a requisição HTTP aos endpoints em diversos cenários, testando o código por completo, da entrada dos dados, processamento e saída. O objetivo desta segregação foi considerar a eficiência dos testes versus o tempo de entrega do projeto. Aplicando este método, foi apurado pela cobertuda de testes do IntelliJ IDEA, em mais de 90% de classes testadas na maioria dos microserviços. A decisão de utilizar o próprio IntelliJ foi motivada pela manutenção de menor número de dependências a serem adicionadas no projeto, com o objetivo de reduzir possibilidades de libs externas abrirem uma fragilidade na segurança da aplicação (lembrando do caso do Log4J) e que no cenário em que o projeto foi desenvolvido não foi necessária a adição do Jacoco.  Para realizar o teste de cobertura, clique com o botão direito do mouse sobre o nome do projeto, navegue até a opção More Run/Debug, em seguida selecione a opção Run tests in <nome do projeto> with Coverage.
 As comunicações dentre microsserviços foram mockadas nos testes de integração, para que os testes se mantenham independentes, porém contemplando os cenários pertinentes a esta comunicação.
 
-# Desafios encontrados no projeto
-Um grande desafio encontrado no projeto foi a quantidade de código implementado através de cinco microsserviços criados, bem como seus bancos de dados individuais, sua documentação e testes. Nos testes de integração, que realiza testes completos desde a entrada da requisição no controller, passar pelos use cases, services, repositories, vai até o banco de dados e retorna uma resposta com status e response body, houve um complicador. O complicador foi que existem endpoints que realizam a comunicação entre microsserviços para validar a existência de um recurso, apenas retornando um http status OK ou retornando um response body. Assim, os testes de integração falhavam por conta desta comunicação externa ao próprio microsserviço. Desta maneira, para solucionar o problema, precisei mockar (com Wiremock) estas comunicações externas a fim de tornar o teste de integração independente. Outro desafio foi recuperar os dados dos microsserviços externos devido a minha inexperiência no assunto. Para resolver a questão, utilizei o Spring Open Fegin, com interfaces que retornam ResponseEntity. Desta maneira, consegui recuperar os dados, bem como o HttpStatus. Se ocorresse erro, criei um handler para capturar e tratar o erro para mandar para o consumidor do endpoint principal. Outro desafio foi o tempo de entrega do trabalho, pois como desenvolvedor solo, a mão de obra foi grande e não implementei outras opções de arquitetura de microsserviços, como utilizar um API Gateway, Service discovery, Config Server e outro framework de segurança como o OAuth2 com OpenID Connect.

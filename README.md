@@ -3,7 +3,7 @@
 ![Badge em Desenvolvimento](http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=GREEN&style=for-the-badge)
 
 # Descrição do projeto
-Desenvolver um sistema eficiente para o processamento de pagamentos de operadoras de cartão de crédito. Nosso objetivo principal é receber os dados das transações com cartão de crédito e validar se o cartão do cliente possui limite disponível para a realização da compra. Este sistema garantirá a verificação precisa e em tempo real do limite de crédito dos clientes,proporcionando uma experiência de pagamento segura e confiável..
+Desenvolver um sistema eficiente para o processamento de pagamentos de operadoras de cartão de crédito. Nosso objetivo principal é receber os dados das transações com cartão de crédito e validar se o cartão do cliente possui limite disponível para a realização da compra. Este sistema garantirá a verificação precisa e em tempo real do limite de crédito dos clientes,proporcionando uma experiência de pagamento segura e confiável.
 
 ## Requisitos:
 1. Microsserviço de usuários: microsserviço responsável por autenticar um usuário e fornecer um token de acesso, para realizar a comunicação com demais microsserviços. O token deverá ter validade de 2 minutos. 
@@ -106,11 +106,50 @@ O objetivo deste microsserviço é realizar a autenticação do usuário e forne
             * Status 500 - para um erro de negócio.
 
     * Documentação da API: http://localhost:8080/swagger-ui/index.html
-    * Banco de dados: http://localhost:5432/usuarios-db
+    * Banco de dados: http://localhost:5432/users-db
 
 # Microsserviço de usuários - Clean Architecture e Entity Diagram
 
 ![alt text](./img/usuarios_arquitetura.png)
+
+# Microsserviço de usuários - Resultado dos testes
+
+31 testes de integração e unidade, executados em 2 segudos, com 100% de classes e 84% de linhas de código cobertas.
+
+![alt text](./img/usuario_cobertura_testes.png)
+
+# Microsserviço de clientes - API
+O objetivo deste microsserviço é realizar o registro de um cliente. 
+* http://localhost:8081/api/cliente
+    * Verbo POST - para realizar o cadastro do cliente.
+        * Escopo: privado, requer autenticação.
+
+        * Contrato:
+
+            ![alt text](./img/cliente_request_body.png)
+
+        * Retorno:
+
+            ![alt text](./img/cliente_response_body.png)
+
+        * Regras de negócio:
+            * Atributos cpf, nome, email e telefone obrigatórios;
+            * Atributo nome com o tamanho mínimo de 2 e máximo de 500 caracteres;
+            * Validação do número do cpf;
+            * Cpf já existente na base não pode ser novamente salvo;
+            * Validação de máscara de email;
+            * email já existente na base não pode ser novamente salvo;
+        * Http response status do endpoint:
+            * Status 200 - Ok - cliente cadastrado com sucesso;
+            * Status 401 - Unauthorized - se o usuário não foi autenticado;
+            * Status 500 - para um erro de negócio.
+
+    * Documentação da API: http://localhost:8081/swagger-ui/index.html
+    * Banco de dados: http://localhost:5433/customers-db
+
+# Microsserviço de usuários - Clean Architecture e Entity Diagram
+
+![alt text](./img/cliente_arquitetura.png)
 
 # Microsserviço de usuários - Resultado dos testes
 

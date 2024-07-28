@@ -147,11 +147,11 @@ O objetivo deste microsserviço é realizar o registro de um cliente.
     * Documentação da API: http://localhost:8081/swagger-ui/index.html
     * Banco de dados: http://localhost:5433/customers-db
 
-# Microsserviço de usuários - Clean Architecture e Entity Diagram
+# Microsserviço de clientes - Clean Architecture e Entity Diagram
 
 ![alt text](./img/cliente_arquitetura.png)
 
-# Microsserviço de usuários - Resultado dos testes
+# Microsserviço de clientes - Resultado dos testes
 
 31 testes de integração e unidade, executados em 2 segudos, com 100% de classes e 84% de linhas de código cobertas.
 

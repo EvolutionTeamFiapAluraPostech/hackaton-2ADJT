@@ -1,9 +1,10 @@
 package br.com.fiap.authentication.user.infrastructure.security;
 
+import static br.com.fiap.authentication.shared.testData.user.UserTestData.createUserSchema;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import br.com.fiap.authentication.shared.testData.user.UserTestData;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,10 +17,14 @@ class TokenServiceTest {
   @InjectMocks
   private TokenService tokenService;
 
+  @BeforeEach
+  void setUp() {
+    ReflectionTestUtils.setField(tokenService, "secret", "Fi@p-@lur@-2ADJT");
+  }
+
   @Test
   void shouldGenerateToken() {
-    ReflectionTestUtils.setField(tokenService, "secret", "Fi@p-@lur@-2ADJT");
-    var userSchema = UserTestData.createUserSchema();
+    var userSchema = createUserSchema();
     var user = userSchema.getUser();
 
     var token = tokenService.generateToken(user);
@@ -29,7 +34,8 @@ class TokenServiceTest {
 
   @Test
   void shouldThrowExceptionWhenGenerateToken() {
-    var userSchema = UserTestData.createUserSchema();
+    ReflectionTestUtils.setField(tokenService, "secret", "");
+    var userSchema = createUserSchema();
     var user = userSchema.getUser();
 
     assertThatThrownBy(() -> tokenService.generateToken(user)).isInstanceOf(
@@ -38,8 +44,7 @@ class TokenServiceTest {
 
   @Test
   void shouldGetSubject() {
-    ReflectionTestUtils.setField(tokenService, "secret", "Fi@p-@lur@-2ADJT");
-    var userSchema = UserTestData.createUserSchema();
+    var userSchema = createUserSchema();
     var user = userSchema.getUser();
 
     var token = tokenService.generateToken(user);

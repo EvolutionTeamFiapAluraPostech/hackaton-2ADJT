@@ -1,5 +1,15 @@
 package br.com.fiap.customers.domain.entity;
 
+import static br.com.fiap.customers.shared.testdata.CustomerTestData.DEFAULT_CUSTOMER_CITY;
+import static br.com.fiap.customers.shared.testdata.CustomerTestData.DEFAULT_CUSTOMER_COUNTRY;
+import static br.com.fiap.customers.shared.testdata.CustomerTestData.DEFAULT_CUSTOMER_CPF;
+import static br.com.fiap.customers.shared.testdata.CustomerTestData.DEFAULT_CUSTOMER_EMAIL;
+import static br.com.fiap.customers.shared.testdata.CustomerTestData.DEFAULT_CUSTOMER_ID;
+import static br.com.fiap.customers.shared.testdata.CustomerTestData.DEFAULT_CUSTOMER_NAME;
+import static br.com.fiap.customers.shared.testdata.CustomerTestData.DEFAULT_CUSTOMER_PHONE_NUMBER;
+import static br.com.fiap.customers.shared.testdata.CustomerTestData.DEFAULT_CUSTOMER_POSTAL_CODE;
+import static br.com.fiap.customers.shared.testdata.CustomerTestData.DEFAULT_CUSTOMER_STATE;
+import static br.com.fiap.customers.shared.testdata.CustomerTestData.DEFAULT_CUSTOMER_STREET;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -12,16 +22,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class CustomerTest {
 
-  public static final String DEFAULT_CUSTOMER_NAME = "Morpheus";
-  public static final String DEFAULT_CUSTOMER_CPF = "18939181069";
-  public static final String DEFAULT_CUSTOMER_EMAIL = "morpheus@matrix.com";
-  public static final String DEFAULT_CUSTOMER_PHONE_NUMBER = "5511912345678";
-  public static final String DEFAULT_CUSTOMER_STREET = "Av. Lins de Vasconcelos";
-  public static final String DEFAULT_CUSTOMER_CITY = "São Paulo";
-  public static final String DEFAULT_CUSTOMER_STATE = "São Paulo";
-  public static final String DEFAULT_CUSTOMER_COUNTRY = "Brasil";
-  public static final String DEFAULT_CUSTOMER_POSTAL_CODE = "01538001";
-  public static final String DEFAULT_CUSTOMER_ID = "dcd3398e-4988-4fba-b8c0-a649ae1ff677";
 
   @ParameterizedTest
   @NullAndEmptySource
@@ -90,5 +90,4 @@ class CustomerTest {
     assertThat(customer.getPostalCode()).isNotNull().isNotEmpty()
         .isEqualTo(DEFAULT_CUSTOMER_POSTAL_CODE);
   }
-
 }

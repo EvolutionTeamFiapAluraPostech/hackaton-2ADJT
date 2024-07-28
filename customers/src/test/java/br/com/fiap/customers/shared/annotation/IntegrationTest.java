@@ -14,7 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 @Tag("integrationTest")
 @SpringBootTest
 @AutoConfigureMockMvc
-@WithMockUser(value = "thomas.anderson@itcompany.com", authorities = {"ADMIN"})
+@WithMockUser(value = "adj2")
 @ActiveProfiles("test")
 @DirtiesContext
 @Target({ElementType.TYPE, ElementType.METHOD})

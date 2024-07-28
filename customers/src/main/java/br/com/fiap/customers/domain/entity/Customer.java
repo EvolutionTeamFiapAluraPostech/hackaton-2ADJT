@@ -1,9 +1,14 @@
 package br.com.fiap.customers.domain.entity;
 
+import br.com.fiap.customers.domain.valueobject.City;
+import br.com.fiap.customers.domain.valueobject.Country;
 import br.com.fiap.customers.domain.valueobject.Cpf;
 import br.com.fiap.customers.domain.valueobject.CustomerName;
 import br.com.fiap.customers.domain.valueobject.Email;
 import br.com.fiap.customers.domain.valueobject.PhoneNumber;
+import br.com.fiap.customers.domain.valueobject.PostalCode;
+import br.com.fiap.customers.domain.valueobject.State;
+import br.com.fiap.customers.domain.valueobject.Street;
 
 public class Customer {
 
@@ -30,11 +35,11 @@ public class Customer {
     this.cpf = new Cpf(cpf).getCpfValue();
     this.email = new Email(email).address();
     this.phoneNumber = new PhoneNumber(phoneNumber).phoneNumberValue();
-    this.street = street;
-    this.city = city;
-    this.state = state;
-    this.country = country;
-    this.postalCode = postalCode;
+    this.street = new Street(street).getStreetValue();
+    this.city = new City(city).getCityValue();
+    this.state = new State(state).getStateValue();
+    this.country = new Country(country).getCountryValue();
+    this.postalCode = new PostalCode(postalCode).getPostalCodeValue();
   }
 
   public String getId() {

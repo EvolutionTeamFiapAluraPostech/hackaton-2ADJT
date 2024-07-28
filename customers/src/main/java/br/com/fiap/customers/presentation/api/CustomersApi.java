@@ -1,0 +1,28 @@
+package br.com.fiap.customers.presentation.api;
+
+import br.com.fiap.customers.presentation.dto.CustomerInputDto;
+import br.com.fiap.customers.presentation.dto.CustomerOutputDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "CustomersApi", description = "API de cadastro de clientes")
+public interface CustomersApi {
+
+  @Operation(summary = "Cadastro de clientes",
+      description = "Endpoint para cadastrar novos clientes.",
+      tags = {"CustomersApi"})
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "201", description = "successful operation",
+          content = {
+              @Content(mediaType = "application/json", schema = @Schema(implementation = CustomerInputDto.class))}),
+      @ApiResponse(responseCode = "400", description = "bad request para validação de cpf, nome, e-mail e telefone.",
+          content = {@Content(schema = @Schema(hidden = true))})})
+  CustomerOutputDto postCustomer(
+      @Parameter(description = "DTO com atributos para se cadastrar um novo cliente. Requer validação de cpf, nome, e-mail e telefone.")
+      CustomerInputDto customerInputDto);
+}

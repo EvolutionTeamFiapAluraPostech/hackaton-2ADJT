@@ -9,10 +9,10 @@ class NoResultExceptionTest {
 
   @Test
   void shouldConstructClass() {
-    var duplicatedException = new DuplicatedException(
+    var noResultException = new NoResultException(
         new FieldError(this.getClass().getSimpleName(), "field", "defaultMessage"));
 
-    assertThat(duplicatedException).isNotNull();
-    assertThat(duplicatedException.getFieldError()).isNotNull();
+    assertThat(noResultException).isNotNull();
+    assertThat(noResultException.getFieldError()).isNotNull();
   }
 }

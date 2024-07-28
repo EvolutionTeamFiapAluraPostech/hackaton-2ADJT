@@ -153,9 +153,9 @@ O objetivo deste microsserviço é realizar o registro de um cliente.
 
 # Microsserviço de clientes - Resultado dos testes
 
-31 testes de integração e unidade, executados em 2 segudos, com 100% de classes e 84% de linhas de código cobertas.
+153 testes de integração e unidade, executados em 2 segudos, com 100% de classes e 92% de linhas de código cobertas.
 
-![alt text](./img/usuario_cobertura_testes.png)
+![alt text](./img/cliente_cobertura_testes.png)
 
 # Clean Architecture
 

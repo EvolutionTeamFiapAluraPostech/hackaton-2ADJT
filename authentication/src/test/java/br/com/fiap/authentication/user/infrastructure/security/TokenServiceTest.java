@@ -20,8 +20,9 @@ class TokenServiceTest {
   void shouldGenerateToken() {
     ReflectionTestUtils.setField(tokenService, "secret", "Fi@p-@lur@-2ADJT");
     var userSchema = UserTestData.createUserSchema();
+    var user = userSchema.getUser();
 
-    var token = tokenService.generateToken(userSchema);
+    var token = tokenService.generateToken(user);
 
     assertThat(token).isNotNull().isNotEmpty();
   }
@@ -29,8 +30,9 @@ class TokenServiceTest {
   @Test
   void shouldThrowExceptionWhenGenerateToken() {
     var userSchema = UserTestData.createUserSchema();
+    var user = userSchema.getUser();
 
-    assertThatThrownBy(() -> tokenService.generateToken(userSchema)).isInstanceOf(
+    assertThatThrownBy(() -> tokenService.generateToken(user)).isInstanceOf(
         RuntimeException.class);
   }
 
@@ -38,8 +40,9 @@ class TokenServiceTest {
   void shouldGetSubject() {
     ReflectionTestUtils.setField(tokenService, "secret", "Fi@p-@lur@-2ADJT");
     var userSchema = UserTestData.createUserSchema();
+    var user = userSchema.getUser();
 
-    var token = tokenService.generateToken(userSchema);
+    var token = tokenService.generateToken(user);
     var subject = tokenService.getSubject(token);
 
     assertThat(subject).isNotNull().isNotEmpty();

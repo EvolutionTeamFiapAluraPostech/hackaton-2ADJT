@@ -35,8 +35,8 @@ public class AuthenticationController implements AuthenticationInterface {
         authenticateInputDto.usuario(),
         authenticateInputDto.senha());
     var authenticate = authenticationManager.authenticate(authenticationToken);
-    var user = ((UserSchema) authenticate.getPrincipal());
-    var tokenJwt = tokenService.generateToken(user);
+    var userSchema = ((UserSchema) authenticate.getPrincipal());
+    var tokenJwt = tokenService.generateToken(userSchema.getUser());
     return ResponseEntity.ok(new JwtAccessTokenDto(tokenJwt));
   }
 }

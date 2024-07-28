@@ -1,6 +1,6 @@
 package br.com.fiap.authentication.user.infrastructure.security;
 
-import br.com.fiap.authentication.user.infrastructure.schema.UserSchema;
+import br.com.fiap.authentication.user.domain.entity.User;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
@@ -19,12 +19,12 @@ public class TokenService {
   @Value("${api.security.token.secret}")
   private String secret;
 
-  public String generateToken(UserSchema userSchema) {
+  public String generateToken(User user) {
     try {
       var algorithm = Algorithm.HMAC256(secret);
       return JWT.create()
           .withIssuer(ISSUER)
-          .withSubject(userSchema.getUsername())
+          .withSubject(user.getUsername())
           .withExpiresAt(getExpirationDate())
           .sign(algorithm);
     } catch (JWTCreationException exception) {

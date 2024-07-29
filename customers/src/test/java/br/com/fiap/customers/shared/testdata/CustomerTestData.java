@@ -11,6 +11,7 @@ public final class CustomerTestData {
   public static final UUID DEFAULT_CUSTOMER_UUID = UUID.fromString(DEFAULT_CUSTOMER_ID);
   public static final String DEFAULT_CUSTOMER_NAME = "Morpheus";
   public static final String DEFAULT_CUSTOMER_CPF = "18939181069";
+  public static final String DEFAULT_CUSTOMER_CPF_ALREADY_POPULATED_IN_DATABASE = "84527263846";
   public static final String DEFAULT_CUSTOMER_EMAIL = "morpheus@matrix.com";
   public static final String DEFAULT_CUSTOMER_PHONE_NUMBER = "5511912345678";
   public static final String DEFAULT_CUSTOMER_STREET = "Av. Lins de Vasconcelos";
@@ -23,7 +24,7 @@ public final class CustomerTestData {
     return new CustomerInputDto(DEFAULT_CUSTOMER_CPF, DEFAULT_CUSTOMER_NAME,
         DEFAULT_CUSTOMER_EMAIL,DEFAULT_CUSTOMER_PHONE_NUMBER,DEFAULT_CUSTOMER_STREET,
         DEFAULT_CUSTOMER_CITY, DEFAULT_CUSTOMER_STATE,
-        DEFAULT_CUSTOMER_COUNTRY, DEFAULT_CUSTOMER_POSTAL_CODE);
+        DEFAULT_CUSTOMER_POSTAL_CODE, DEFAULT_CUSTOMER_COUNTRY);
   }
 
   public static Customer createNewCustomer() {

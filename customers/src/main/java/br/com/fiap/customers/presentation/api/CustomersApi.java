@@ -25,4 +25,14 @@ public interface CustomersApi {
   CustomerOutputDto postCustomer(
       @Parameter(description = "DTO com atributos para se cadastrar um novo cliente. Requer validação de cpf, nome, e-mail e telefone.")
       CustomerInputDto customerInputDto);
+
+  @Operation(summary = "Pesquisa de cliente por CPF",
+      description = "Endpoint para pesquisar um cliente por CPF", tags = "CustomersApi")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "successful operation", content = {
+          @Content(mediaType = "application/json", schema = @Schema(implementation = CustomerOutputDto.class))}),
+      @ApiResponse(responseCode = "404", description = "not found para cliente não encontrado",
+          content = {@Content(schema = @Schema(hidden = true))})})
+  CustomerOutputDto getCustomerByCpf(
+      @Parameter(description = "Número de CPF do cliente") String cpf);
 }

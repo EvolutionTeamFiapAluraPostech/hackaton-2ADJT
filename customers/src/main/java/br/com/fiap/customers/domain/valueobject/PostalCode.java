@@ -20,12 +20,14 @@ public class PostalCode {
   }
 
   private void validatePostalCodeOnlyNumbers(String postalCodeValue) {
-    var validPostalCode = Pattern.compile(POSTAL_CODE_VALID_FORMAT).matcher(postalCodeValue)
-        .matches();
-    if (!validPostalCode) {
-      throw new ValidatorException(
-          new FieldError(this.getClass().getSimpleName(), POSTAL_CODE_FIELD,
-              POSTAL_CODE_ACCEPT_ONLY_NUMBERS.formatted(postalCodeValue)));
+    if (postalCodeValue != null && !postalCodeValue.trim().isEmpty()) {
+      var validPostalCode = Pattern.compile(POSTAL_CODE_VALID_FORMAT).matcher(postalCodeValue)
+          .matches();
+      if (!validPostalCode) {
+        throw new ValidatorException(
+            new FieldError(this.getClass().getSimpleName(), POSTAL_CODE_FIELD,
+                POSTAL_CODE_ACCEPT_ONLY_NUMBERS.formatted(postalCodeValue)));
+      }
     }
   }
 

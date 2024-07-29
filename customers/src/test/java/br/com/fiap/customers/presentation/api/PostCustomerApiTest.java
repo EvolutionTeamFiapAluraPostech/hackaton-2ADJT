@@ -1,6 +1,7 @@
 package br.com.fiap.customers.presentation.api;
 
 
+import static br.com.fiap.customers.shared.testdata.CustomerTestData.DEFAULT_CUSTOMER_CPF_ALREADY_POPULATED_IN_DATABASE;
 import static br.com.fiap.customers.shared.testdata.CustomerTestData.DEFAULT_CUSTOMER_CITY;
 import static br.com.fiap.customers.shared.testdata.CustomerTestData.DEFAULT_CUSTOMER_COUNTRY;
 import static br.com.fiap.customers.shared.testdata.CustomerTestData.DEFAULT_CUSTOMER_CPF;
@@ -38,7 +39,6 @@ import org.springframework.test.web.servlet.MockMvc;
 class PostCustomerApiTest {
 
   private static final String URL_CUSTOMERS = "/api/cliente";
-  public static final String CUSTOMER_CPF_ALREADY_POPULATED_IN_DATABASE = "84527263846";
   private final MockMvc mockMvc;
   private final EntityManager entityManager;
 
@@ -52,7 +52,7 @@ class PostCustomerApiTest {
   @NullAndEmptySource
   void shouldReturnBadRequestWhenCpfIsNotPresentOrIsInvalid(String cpf) throws Exception {
     var customer = new CustomerInputDto(cpf, DEFAULT_CUSTOMER_NAME, DEFAULT_CUSTOMER_EMAIL,
-        DEFAULT_CUSTOMER_PHONE_NUMBER,DEFAULT_CUSTOMER_STREET,
+        DEFAULT_CUSTOMER_PHONE_NUMBER, DEFAULT_CUSTOMER_STREET,
         DEFAULT_CUSTOMER_CITY, DEFAULT_CUSTOMER_STATE,
         DEFAULT_CUSTOMER_COUNTRY, DEFAULT_CUSTOMER_POSTAL_CODE);
     var customerJson = JsonUtil.toJson(customer);
@@ -83,10 +83,10 @@ class PostCustomerApiTest {
 
   @Test
   void shouldReturnConflictWhenCpfAlreadyExists() throws Exception {
-    var customer = new CustomerInputDto(CUSTOMER_CPF_ALREADY_POPULATED_IN_DATABASE,
+    var customer = new CustomerInputDto(DEFAULT_CUSTOMER_CPF_ALREADY_POPULATED_IN_DATABASE,
         DEFAULT_CUSTOMER_NAME, DEFAULT_CUSTOMER_EMAIL, DEFAULT_CUSTOMER_PHONE_NUMBER,
         DEFAULT_CUSTOMER_STREET, DEFAULT_CUSTOMER_CITY, DEFAULT_CUSTOMER_STATE,
-        DEFAULT_CUSTOMER_COUNTRY, DEFAULT_CUSTOMER_POSTAL_CODE);
+        DEFAULT_CUSTOMER_POSTAL_CODE, DEFAULT_CUSTOMER_COUNTRY);
     var customerJson = JsonUtil.toJson(customer);
 
     var request = post(URL_CUSTOMERS)
@@ -147,7 +147,7 @@ class PostCustomerApiTest {
   @ParameterizedTest
   @NullAndEmptySource
   void shouldReturnBadRequestWhenEmailIsNotPresent(String email) throws Exception {
-    var customer = new CustomerInputDto(DEFAULT_CUSTOMER_CPF,DEFAULT_CUSTOMER_NAME,
+    var customer = new CustomerInputDto(DEFAULT_CUSTOMER_CPF, DEFAULT_CUSTOMER_NAME,
         email, DEFAULT_CUSTOMER_PHONE_NUMBER,
         DEFAULT_CUSTOMER_STREET, DEFAULT_CUSTOMER_CITY, DEFAULT_CUSTOMER_STATE,
         DEFAULT_CUSTOMER_COUNTRY, DEFAULT_CUSTOMER_POSTAL_CODE);
@@ -163,7 +163,7 @@ class PostCustomerApiTest {
   @Test
   void shouldReturnBadRequestWhenEmailMinLengthIsInvalid() throws Exception {
     var email = "A";
-    var customer = new CustomerInputDto(DEFAULT_CUSTOMER_CPF,DEFAULT_CUSTOMER_NAME,
+    var customer = new CustomerInputDto(DEFAULT_CUSTOMER_CPF, DEFAULT_CUSTOMER_NAME,
         email, DEFAULT_CUSTOMER_PHONE_NUMBER,
         DEFAULT_CUSTOMER_STREET, DEFAULT_CUSTOMER_CITY, DEFAULT_CUSTOMER_STATE,
         DEFAULT_CUSTOMER_COUNTRY, DEFAULT_CUSTOMER_POSTAL_CODE);
@@ -179,7 +179,7 @@ class PostCustomerApiTest {
   @Test
   void shouldReturnBadRequestWhenEmailMaxLengthIsInvalid() throws Exception {
     var email = StringUtil.generateStringLength(501);
-    var customer = new CustomerInputDto(DEFAULT_CUSTOMER_CPF,DEFAULT_CUSTOMER_NAME,
+    var customer = new CustomerInputDto(DEFAULT_CUSTOMER_CPF, DEFAULT_CUSTOMER_NAME,
         email, DEFAULT_CUSTOMER_PHONE_NUMBER,
         DEFAULT_CUSTOMER_STREET, DEFAULT_CUSTOMER_CITY, DEFAULT_CUSTOMER_STATE,
         DEFAULT_CUSTOMER_COUNTRY, DEFAULT_CUSTOMER_POSTAL_CODE);
@@ -196,7 +196,7 @@ class PostCustomerApiTest {
   @ValueSource(strings = {"email.domain.com", " email.domain.com", "@", "1", "email@domain",
       "A@b@c@example.com", "a\"b(c)d,e:f;g<h>i[j\\k]l@example.com", "email @example.com"})
   void shouldReturnBadRequestWhenEmailIsInvalid(String email) throws Exception {
-    var customer = new CustomerInputDto(DEFAULT_CUSTOMER_CPF,DEFAULT_CUSTOMER_NAME,
+    var customer = new CustomerInputDto(DEFAULT_CUSTOMER_CPF, DEFAULT_CUSTOMER_NAME,
         email, DEFAULT_CUSTOMER_PHONE_NUMBER,
         DEFAULT_CUSTOMER_STREET, DEFAULT_CUSTOMER_CITY, DEFAULT_CUSTOMER_STATE,
         DEFAULT_CUSTOMER_COUNTRY, DEFAULT_CUSTOMER_POSTAL_CODE);
@@ -212,7 +212,7 @@ class PostCustomerApiTest {
   @ParameterizedTest
   @NullAndEmptySource
   void shouldReturnBadRequestWhenTelefoneIsNotPresent(String telefone) throws Exception {
-    var customer = new CustomerInputDto(DEFAULT_CUSTOMER_CPF,DEFAULT_CUSTOMER_NAME,
+    var customer = new CustomerInputDto(DEFAULT_CUSTOMER_CPF, DEFAULT_CUSTOMER_NAME,
         DEFAULT_CUSTOMER_EMAIL, telefone,
         DEFAULT_CUSTOMER_STREET, DEFAULT_CUSTOMER_CITY, DEFAULT_CUSTOMER_STATE,
         DEFAULT_CUSTOMER_COUNTRY, DEFAULT_CUSTOMER_POSTAL_CODE);
@@ -227,10 +227,10 @@ class PostCustomerApiTest {
 
   @Test
   void shouldReturnOkWhenNewCustomerWasCreated() throws Exception {
-    var customer = new CustomerInputDto(DEFAULT_CUSTOMER_CPF,DEFAULT_CUSTOMER_NAME,
+    var customer = new CustomerInputDto(DEFAULT_CUSTOMER_CPF, DEFAULT_CUSTOMER_NAME,
         DEFAULT_CUSTOMER_EMAIL, DEFAULT_CUSTOMER_PHONE_NUMBER, DEFAULT_CUSTOMER_STREET,
-        DEFAULT_CUSTOMER_CITY, DEFAULT_CUSTOMER_STATE, DEFAULT_CUSTOMER_COUNTRY,
-        DEFAULT_CUSTOMER_POSTAL_CODE);
+        DEFAULT_CUSTOMER_CITY, DEFAULT_CUSTOMER_STATE,
+        DEFAULT_CUSTOMER_POSTAL_CODE, DEFAULT_CUSTOMER_COUNTRY);
     var customerJson = JsonUtil.toJson(customer);
 
     var request = post(URL_CUSTOMERS)

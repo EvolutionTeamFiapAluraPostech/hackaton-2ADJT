@@ -6,7 +6,7 @@ import org.springframework.validation.FieldError;
 public record Email(String address) {
 
   public static final String EMAIL_FIELD_NAME = "email";
-  public static final String EMAIL_INVALID = "Invalid email address. %s";
+  public static final String EMAIL_INVALID = "Endereço de email inválido. %s";
   public static final String EMAIL_REGEX = "^[a-zA-Z0-9._]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 
   public Email {

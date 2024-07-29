@@ -5,11 +5,11 @@ import org.springframework.validation.FieldError;
 
 public class Cpf {
 
-  public static final String CPF_FIELD = "CPF";
-  public static final String CPF_NOT_NULL_MESSAGE = "CPF cannot be null.";
-  public static final String CPF_NOT_EMPTY_MESSAGE = "CPF cannot be empty.";
-  public static final String CPF_LENGTH_INVALID_MESSAGE = "CPF length is invalid. Correct length is 11 but it has %s";
-  public static final String CPF_INVALID = "Invalid CPF %s.";
+  public static final String CPF_FIELD = "cpf";
+  public static final String CPF_NOT_NULL_MESSAGE = "O CPF não pode ser nulo.";
+  public static final String CPF_NOT_EMPTY_MESSAGE = "O CPF não pode ser vazio.";
+  public static final String CPF_LENGTH_INVALID_MESSAGE = "O tamanho do CPF é inválido. O tamanho correto é 11, mas foi informado %s";
+  public static final String CPF_INVALID = "CPF inválido %s.";
   private final String cpfValue;
 
   public Cpf(String cpfValue) {

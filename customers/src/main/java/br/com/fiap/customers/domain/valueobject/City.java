@@ -6,8 +6,8 @@ import org.springframework.validation.FieldError;
 public class City {
 
   public static final Integer CITY_FIELD_MAX_LENGTH = 100;
-  public static final String CITY_MAX_LENGTH_IS_100_YOU_TYPED_MESSAGE = "City max length is %s. You typed %s";
-  private static final String CITY_FIELD = "city";
+  public static final String CITY_MAX_LENGTH_IS_100_YOU_TYPED_MESSAGE = "O tamanho máximo para a cidade é %s. Você informou %s";
+  private static final String CITY_FIELD = "cidade";
   private final String cityValue;
 
   public City(String cityValue) {

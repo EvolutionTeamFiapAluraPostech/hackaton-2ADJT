@@ -6,8 +6,8 @@ import org.springframework.validation.FieldError;
 public class Country {
 
   public static final Integer COUNTRY_FIELD_MAX_LENGTH = 100;
-  public static final String COUNTRY_MAX_LENGTH_IS_100_YOU_TYPED_MESSAGE = "Country max length is %s. You typed %s";
-  private static final String COUNTRY_FIELD = "country";
+  public static final String COUNTRY_MAX_LENGTH_IS_100_YOU_TYPED_MESSAGE = "O tamanho máximo para o país é %s. Você informou %s";
+  private static final String COUNTRY_FIELD = "pais";
   private final String countryValue;
 
   public Country(String countryValue) {

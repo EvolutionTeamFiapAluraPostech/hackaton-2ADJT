@@ -6,8 +6,8 @@ import org.springframework.validation.FieldError;
 public class Street {
 
   public static final Integer STREET_FIELD_MAX_LENGTH = 255;
-  public static final String STREET_MAX_LENGTH_IS_255_YOU_TYPED_MESSAGE = "Street max length is %s. You typed %s";
-  private static final String STREET_FIELD = "street";
+  public static final String STREET_MAX_LENGTH_IS_255_YOU_TYPED_MESSAGE = "O tamanho máximo para a rua é %s. Você digitou %s";
+  private static final String STREET_FIELD = "rua";
   private final String streetValue;
 
   public Street(String streetValue) {

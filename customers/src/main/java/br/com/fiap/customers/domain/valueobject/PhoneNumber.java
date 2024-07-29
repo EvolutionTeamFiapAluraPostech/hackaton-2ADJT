@@ -5,9 +5,9 @@ import org.springframework.validation.FieldError;
 
 public record PhoneNumber(String phoneNumberValue) {
 
-  public static final String PHONE_NUMBER_FIELD = "phoneNumber";
-  public static final String PHONE_NUMBER_NOT_NULL_MESSAGE = "Phone number cannot be null.";
-  public static final String PHONE_NUMBER_NOT_EMPTY_MESSAGE = "Phone number cannot be empty.";
+  public static final String PHONE_NUMBER_FIELD = "telefone";
+  public static final String PHONE_NUMBER_NOT_NULL_MESSAGE = "O número de telefone não pode ser nulo.";
+  public static final String PHONE_NUMBER_NOT_EMPTY_MESSAGE = "O número de telefone não pode ser vazio.";
 
   public PhoneNumber {
     if (phoneNumberValue == null) {

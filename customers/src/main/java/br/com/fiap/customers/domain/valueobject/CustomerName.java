@@ -5,7 +5,7 @@ import org.springframework.validation.FieldError;
 
 public class CustomerName {
 
-  public static final String NAME_FIELD = "name";
+  public static final String NAME_FIELD = "nome";
   public static final String NAME_NOT_NULL_MESSAGE = "Customer name cannot be null";
   public static final String NAME_NOT_EMPTY_MESSAGE = "Customer name cannot be empty";
   public static final String NAME_MIN_LENGTH_INVALID_MESSAGE = "Customer name min length is invalid. Min length is 2";

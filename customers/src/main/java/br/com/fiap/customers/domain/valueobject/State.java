@@ -6,8 +6,8 @@ import org.springframework.validation.FieldError;
 public class State {
 
   public static final Integer STATE_FIELD_MAX_LENGTH = 100;
-  public static final String STATE_MAX_LENGTH_IS_100_YOU_TYPED_MESSAGE = "State max length is %s. You typed %s";
-  private static final String STATE_FIELD = "state";
+  public static final String STATE_MAX_LENGTH_IS_100_YOU_TYPED_MESSAGE = "O tamanho máximo para o estado é %s. Você digitou %s";
+  private static final String STATE_FIELD = "estado";
   private final String stateValue;
 
   public State(String stateValue) {

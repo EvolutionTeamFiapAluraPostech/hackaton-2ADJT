@@ -1,5 +1,6 @@
 package br.com.fiap.customers.infrastructure.security;
 
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 
 import org.springframework.context.annotation.Bean;
@@ -36,6 +37,7 @@ public class SecurityConfig {
         .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(req -> {
           req.requestMatchers(POST, URL_CLIENTES).authenticated();
+          req.requestMatchers(GET, URL_CLIENTES + "/**").authenticated();
           req.requestMatchers(V3_API_DOCS, SWAGGER_UI_HTML, SWAGGER_UI).permitAll();
           req.anyRequest().denyAll();
         })

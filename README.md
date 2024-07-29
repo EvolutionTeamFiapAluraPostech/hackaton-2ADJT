@@ -143,6 +143,19 @@ O objetivo deste microsserviço é realizar o registro de um cliente.
             * Status 200 - Ok - cliente cadastrado com sucesso;
             * Status 401 - Unauthorized - se o usuário não foi autenticado;
             * Status 500 - para um erro de negócio.
+* http://localhost:8081/api/cliente/{cpf}
+    * Verbo GET - para realizar a pesquisa de um cliente por seu cpf. Será utilizado na validação do cliente no microserviço de registro de cartão de crédito.
+        * Escopo: privado, requer autenticação.
+        * Retorno:
+
+            ![alt text](./img/cliente_response_body.png)
+
+        * Regras de negócio:
+            * O parâmetro CPF é obrigatório e válido.
+        * Http response status do endpoint:
+            * Status 200 - Ok - cliente encontrado;
+            * Status 401 - Unauthorized - se o usuário não foi autenticado;
+            * Status 500 - para um erro de negócio.
 
     * Documentação da API: http://localhost:8081/swagger-ui/index.html
     * Banco de dados: http://localhost:5433/customers-db
@@ -153,7 +166,59 @@ O objetivo deste microsserviço é realizar o registro de um cliente.
 
 # Microsserviço de clientes - Resultado dos testes
 
-153 testes de integração e unidade, executados em 2 segudos, com 100% de classes e 92% de linhas de código cobertas.
+163 testes de integração e unidade, executados em 2 segudos, com 100% de classes e 92% de linhas de código cobertas.
+
+![alt text](./img/cliente_cobertura_testes.png)
+
+# Microsserviço de cartões de crédito - API
+O objetivo deste microsserviço é realizar o registro de cartões de crédito de um cliente. 
+* http://localhost:8082/api/cartao
+    * Verbo POST - para realizar o cadastro do cartão de crédito do cliente.
+        * Escopo: privado, requer autenticação.
+        * Contrato:
+
+            ![alt text](./img/cartaocredito_request_body.png)
+
+        * Retorno:
+
+            http status: 200 para cartão de crédito cadastrado com sucesso.
+
+        * Regras de negócio:
+            * Atributos cpf, limite, número do cartão, data de validade e cvv obrigatórios;
+            * Validação do número do cpf;
+            * O valor do limite deve ser maior que zero.
+            * O número do cartão deve ter 16 dígitos.
+            * O número do cartão deve ser único.
+            * É permitido apenas dois cartões por cpf.
+        * Http response status do endpoint:
+            * Status 200 - Ok - cliente cadastrado com sucesso;
+            * Status 401 - Unauthorized - se o usuário não foi autenticado;
+            * Status 403 - para o número máximo de cartão atingido por cliente;
+            * Status 500 - para um erro de negócio.
+* http://localhost:8082/api/cartao/{numero}/cliente/{cpf}
+    * Verbo GET - para realizar a pesquisa de um cartão pelo número e pelo cpf do cliente. Será utilizado na validação do cartão pertencente ao cliente e o limite disponível no microserviço de registro de pagamentos.
+        * Escopo: privado, requer autenticação.
+        * Retorno:
+
+            ![alt text](./img/cartaocredito_response_body.png)
+
+        * Regras de negócio:
+            * Os parâmetros número do cartão e cpf são obrigatórios.
+        * Http response status do endpoint:
+            * Status 200 - Ok - cartão de crédito encontrado;
+            * Status 401 - Unauthorized - se o usuário não foi autenticado;
+            * Status 500 - para um erro de negócio.
+
+    * Documentação da API: http://localhost:8082/swagger-ui/index.html
+    * Banco de dados: http://localhost:5434/creditcard-db
+
+# Microsserviço de cartões de crédito - Clean Architecture e Entity Diagram
+
+![alt text](./img/cartaocredito_arquitetura.png)
+
+# Microsserviço de cartões de crédito - Resultado dos testes
+
+163 testes de integração e unidade, executados em 2 segudos, com 100% de classes e 92% de linhas de código cobertas.
 
 ![alt text](./img/cliente_cobertura_testes.png)
 

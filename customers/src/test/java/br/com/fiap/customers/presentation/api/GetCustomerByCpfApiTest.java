@@ -45,6 +45,6 @@ class GetCustomerByCpfApiTest {
     mockMvc.perform(request)
         .andExpect(status().isOk())
         .andExpect(content().contentType(APPLICATION_JSON))
-        .andExpect(jsonPath("$.idCliente", equalTo(DEFAULT_CUSTOMER_ID)));
+        .andExpect(jsonPath("$.id_cliente", equalTo(DEFAULT_CUSTOMER_ID)));
   }
 }

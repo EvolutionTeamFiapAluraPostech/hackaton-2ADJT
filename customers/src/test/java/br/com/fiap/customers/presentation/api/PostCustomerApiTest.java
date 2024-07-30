@@ -238,11 +238,11 @@ class PostCustomerApiTest {
         .content(customerJson);
     var mvcResult = mockMvc.perform(request)
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.idCliente", isUUID()))
+        .andExpect(jsonPath("$.id_cliente", isUUID()))
         .andReturn();
 
     var contentAsString = mvcResult.getResponse().getContentAsString();
-    var id = JsonPath.parse(contentAsString).read("$.idCliente").toString();
+    var id = JsonPath.parse(contentAsString).read("$.id_cliente").toString();
     var customerFound = entityManager.find(CustomerSchema.class, UUID.fromString(id));
     assertThat(customerFound).isNotNull();
     assertThat(customerFound.getName()).isNotNull().isEqualTo(customer.nome());

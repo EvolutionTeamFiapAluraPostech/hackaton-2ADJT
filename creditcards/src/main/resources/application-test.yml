@@ -14,5 +14,4 @@ spring:
 
 base:
   url:
-    http-user: http://localhost:7070
     http-customer: http://localhost:7070

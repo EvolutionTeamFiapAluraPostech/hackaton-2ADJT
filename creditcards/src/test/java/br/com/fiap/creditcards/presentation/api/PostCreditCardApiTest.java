@@ -5,6 +5,8 @@ import static br.com.fiap.creditcards.shared.testdata.CreditCardTestData.DEFAULT
 import static br.com.fiap.creditcards.shared.testdata.CreditCardTestData.DEFAULT_CREDIT_CARD_EXPIRATION_DATE;
 import static br.com.fiap.creditcards.shared.testdata.CreditCardTestData.DEFAULT_CREDIT_CARD_LIMIT;
 import static br.com.fiap.creditcards.shared.testdata.CreditCardTestData.DEFAULT_CREDIT_CARD_NUMBER;
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -17,6 +19,7 @@ import br.com.fiap.creditcards.shared.annotation.IntegrationTest;
 import br.com.fiap.creditcards.shared.api.JsonUtil;
 import br.com.fiap.creditcards.shared.testdata.CreditCardTestData;
 import br.com.fiap.creditcards.shared.util.StringUtil;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
@@ -24,6 +27,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
 
 @IntegrationTest
@@ -156,6 +160,8 @@ class PostCreditCardApiTest {
     var creditCard = new CreditCardInputDto(DEFAULT_CREDIT_CARD_CPF, DEFAULT_CREDIT_CARD_LIMIT,
         DEFAULT_CREDIT_CARD_NUMBER, DEFAULT_CREDIT_CARD_EXPIRATION_DATE, DEFAULT_CREDIT_CARD_CVV);
     var creditCardJson = JsonUtil.toJson(creditCard);
+    stubFor(WireMock.get("/api/cliente/" + creditCard.cpf())
+        .willReturn(aResponse().withStatus(HttpStatus.INTERNAL_SERVER_ERROR.value())));
 
     var request = post(URL_CREDITCARDS)
         .contentType(APPLICATION_JSON)
@@ -173,6 +179,8 @@ class PostCreditCardApiTest {
     var creditCardInputDto = new CreditCardInputDto(DEFAULT_CREDIT_CARD_CPF, DEFAULT_CREDIT_CARD_LIMIT,
         ALTERNATIVE_CREDIT_CARD_NUMBER, DEFAULT_CREDIT_CARD_EXPIRATION_DATE, DEFAULT_CREDIT_CARD_CVV);
     var creditCardJson = JsonUtil.toJson(creditCardInputDto);
+    stubFor(WireMock.get("/api/cliente/" + creditCard.getCpf())
+        .willReturn(aResponse().withStatus(HttpStatus.OK.value())));
 
     var request = post(URL_CREDITCARDS)
         .contentType(APPLICATION_JSON)
@@ -187,6 +195,8 @@ class PostCreditCardApiTest {
         ALTERNATIVE_CREDIT_CARD_NUMBER, DEFAULT_CREDIT_CARD_EXPIRATION_DATE,
         DEFAULT_CREDIT_CARD_CVV);
     var creditCardJson = JsonUtil.toJson(creditCard);
+    stubFor(WireMock.get("/api/cliente/" + creditCard.cpf())
+        .willReturn(aResponse().withStatus(HttpStatus.OK.value())));
 
     var request = post(URL_CREDITCARDS)
         .contentType(APPLICATION_JSON)

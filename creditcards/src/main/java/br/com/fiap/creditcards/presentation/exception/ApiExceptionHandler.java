@@ -28,7 +28,7 @@ public class ApiExceptionHandler {
   @ExceptionHandler(NoResultException.class)
   public ResponseEntity<?> handlerNoResultException(NoResultException exception) {
     var error = exception.getFieldError();
-    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDto(error));
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorDto(error));
   }
 
   @ExceptionHandler(CreditCardMaxQuantityReachedException.class)

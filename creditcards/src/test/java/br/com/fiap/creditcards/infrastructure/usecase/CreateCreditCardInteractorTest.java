@@ -5,11 +5,11 @@ import static br.com.fiap.creditcards.domain.valueobject.CreditCardNumber.NUMBER
 import static br.com.fiap.creditcards.infrastructure.validator.CreditCardSchemaNumberAlreadyExistsValidator.CREDIT_CARD_ALREADY_EXISTS;
 import static br.com.fiap.creditcards.infrastructure.validator.CreditCardSchemaQuantityValidator.CREDIT_CARD_VALID_MESSAGE;
 import static br.com.fiap.creditcards.infrastructure.validator.CreditCardSchemaQuantityValidator.CREDIT_CARD_VALID_QUANTITY;
+import static br.com.fiap.creditcards.shared.testdata.CreditCardTestData.DEFAULT_CREDIT_CARD_CPF;
 import static br.com.fiap.creditcards.shared.testdata.CreditCardTestData.DEFAULT_CREDIT_CARD_NUMBER;
 import static br.com.fiap.creditcards.shared.testdata.CreditCardTestData.createNewCreditCardInputDto;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -19,8 +19,10 @@ import static org.mockito.Mockito.verify;
 import br.com.fiap.creditcards.application.gateway.CreditCardGateway;
 import br.com.fiap.creditcards.application.validator.CreditCardNumberAlreadyExistsValidator;
 import br.com.fiap.creditcards.application.validator.CreditCardQuantityValidator;
+import br.com.fiap.creditcards.application.validator.CustomerExistsValidator;
 import br.com.fiap.creditcards.domain.entity.CreditCard;
 import br.com.fiap.creditcards.domain.exception.DuplicatedException;
+import br.com.fiap.creditcards.domain.exception.NoResultException;
 import br.com.fiap.creditcards.domain.exception.ValidatorException;
 import br.com.fiap.creditcards.shared.testdata.CreditCardTestData;
 import org.junit.jupiter.api.Test;
@@ -39,8 +41,23 @@ class CreateCreditCardInteractorTest {
   private CreditCardNumberAlreadyExistsValidator creditCardNumberAlreadyExistsValidator;
   @Mock
   private CreditCardQuantityValidator creditCardQuantityValidator;
+  @Mock
+  private CustomerExistsValidator customerExistsValidator;
   @InjectMocks
   private CreateCreditCardInteractor createCreditCardInteractor;
+
+  @Test
+  void shouldThrowNoResultExceptionWhenCustomerDoesNotExistInCustomersMicroservice() {
+    doThrow(NoResultException.class).when(customerExistsValidator)
+        .validate(DEFAULT_CREDIT_CARD_CPF);
+
+    assertThatThrownBy(() -> customerExistsValidator.validate(DEFAULT_CREDIT_CARD_CPF))
+        .isInstanceOf(NoResultException.class);
+
+    verify(creditCardNumberAlreadyExistsValidator, never()).validate(any(String.class));
+    verify(creditCardQuantityValidator, never()).validate(any(String.class));
+    verify(creditCardGateway, never()).save(any(CreditCard.class));
+  }
 
   @Test
   void shouldThrowDuplicatedExceptionWhenCreditCardNumberAlreadyExists() {
@@ -70,11 +87,6 @@ class CreateCreditCardInteractorTest {
         .hasMessage(CREDIT_CARD_VALID_MESSAGE.formatted(CREDIT_CARD_VALID_QUANTITY));
 
     verify(creditCardGateway, never()).save(any(CreditCard.class));
-  }
-
-  @Test
-  void shouldThrowNoResultExceptionWhenCpfDoesNotExistInCustomerMicroservice() {
-    fail("shouldThrowNoResultExceptionWhenCpfDoesNotExistInCustomerMicroservice");
   }
 
   @Test

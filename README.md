@@ -166,7 +166,7 @@ O objetivo deste microsserviço é realizar o registro de um cliente.
 
 # Microsserviço de clientes - Resultado dos testes
 
-166 testes de integração e unidade, executados em 2 segudos, com 100% de classes e 93% de linhas de código cobertas.
+169 testes de integração e unidade, executados em 2 segudos, com 100% de classes e 91% de linhas de código cobertas.
 
 ![alt text](./img/cliente_cobertura_testes.png)
 
@@ -218,9 +218,9 @@ O objetivo deste microsserviço é realizar o registro de cartões de crédito d
 
 # Microsserviço de cartões de crédito - Resultado dos testes
 
-163 testes de integração e unidade, executados em 2 segudos, com 100% de classes e 92% de linhas de código cobertas.
+135 testes de integração e unidade, executados em 2 segudos, com 100% de classes e 91% de linhas de código cobertas.
 
-![alt text](./img/cliente_cobertura_testes.png)
+![alt text](./img/cartaocredito_cobertura_testes.png)
 
 # Clean Architecture
 

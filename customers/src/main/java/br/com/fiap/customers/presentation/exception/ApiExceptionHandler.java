@@ -14,13 +14,13 @@ public class ApiExceptionHandler {
   @ExceptionHandler(DuplicatedException.class)
   public ResponseEntity<?> handlerDuplicatedException(DuplicatedException exception) {
     var error = exception.getFieldError();
-    return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorDto(error));
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDto(error));
   }
 
   @ExceptionHandler(ValidatorException.class)
   public ResponseEntity<?> handlerValidatorException(ValidatorException exception) {
     var error = exception.getFieldError();
-    return ResponseEntity.badRequest().body(new ErrorDto(error));
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDto(error));
   }
 
   @ExceptionHandler(Exception.class)

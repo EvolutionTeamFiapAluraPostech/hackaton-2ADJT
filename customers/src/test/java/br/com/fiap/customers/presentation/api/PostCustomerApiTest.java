@@ -50,7 +50,7 @@ class PostCustomerApiTest {
 
   @ParameterizedTest
   @NullAndEmptySource
-  void shouldReturnBadRequestWhenCpfIsNotPresentOrIsInvalid(String cpf) throws Exception {
+  void shouldReturnInternalServerErrorWhenCpfIsNotPresentOrIsInvalid(String cpf) throws Exception {
     var customer = new CustomerInputDto(cpf, DEFAULT_CUSTOMER_NAME, DEFAULT_CUSTOMER_EMAIL,
         DEFAULT_CUSTOMER_PHONE_NUMBER, DEFAULT_CUSTOMER_STREET,
         DEFAULT_CUSTOMER_CITY, DEFAULT_CUSTOMER_STATE,
@@ -61,12 +61,12 @@ class PostCustomerApiTest {
         .contentType(APPLICATION_JSON)
         .content(customerJson);
     mockMvc.perform(request)
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isInternalServerError());
   }
 
   @ParameterizedTest
   @ValueSource(strings = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"})
-  void shouldReturnBadRequestWhenCpfIsInvalid(String number) throws Exception {
+  void shouldReturnInternalServerErrorWhenCpfIsInvalid(String number) throws Exception {
     var cpf = StringUtil.generateStringRepeatCharLength(number, 11);
     var customer = new CustomerInputDto(cpf, DEFAULT_CUSTOMER_NAME,
         DEFAULT_CUSTOMER_EMAIL, DEFAULT_CUSTOMER_PHONE_NUMBER,
@@ -78,11 +78,11 @@ class PostCustomerApiTest {
         .contentType(APPLICATION_JSON)
         .content(customerJson);
     mockMvc.perform(request)
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isInternalServerError());
   }
 
   @Test
-  void shouldReturnConflictWhenCpfAlreadyExists() throws Exception {
+  void shouldReturnInternalServerErrorWhenCpfAlreadyExists() throws Exception {
     var customer = new CustomerInputDto(DEFAULT_CUSTOMER_CPF_ALREADY_POPULATED_IN_DATABASE,
         DEFAULT_CUSTOMER_NAME, DEFAULT_CUSTOMER_EMAIL, DEFAULT_CUSTOMER_PHONE_NUMBER,
         DEFAULT_CUSTOMER_STREET, DEFAULT_CUSTOMER_CITY, DEFAULT_CUSTOMER_STATE,
@@ -93,12 +93,12 @@ class PostCustomerApiTest {
         .contentType(APPLICATION_JSON)
         .content(customerJson);
     mockMvc.perform(request)
-        .andExpect(status().isConflict());
+        .andExpect(status().isInternalServerError());
   }
 
   @ParameterizedTest
   @NullAndEmptySource
-  void shouldReturnBadRequestWhenNomeIsNotPresent(String nome) throws Exception {
+  void shouldReturnInternalServerErrorWhenNomeIsNotPresent(String nome) throws Exception {
     var customer = new CustomerInputDto(DEFAULT_CUSTOMER_CPF, nome,
         DEFAULT_CUSTOMER_EMAIL, DEFAULT_CUSTOMER_PHONE_NUMBER,
         DEFAULT_CUSTOMER_STREET, DEFAULT_CUSTOMER_CITY, DEFAULT_CUSTOMER_STATE,
@@ -109,11 +109,11 @@ class PostCustomerApiTest {
         .contentType(APPLICATION_JSON)
         .content(customerJson);
     mockMvc.perform(request)
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isInternalServerError());
   }
 
   @Test
-  void shouldReturnBadRequestWhenNomeMinLengthIsInvalid() throws Exception {
+  void shouldReturnInternalServerErrorWhenNomeMinLengthIsInvalid() throws Exception {
     var name = "A";
     var customer = new CustomerInputDto(DEFAULT_CUSTOMER_CPF, name,
         DEFAULT_CUSTOMER_EMAIL, DEFAULT_CUSTOMER_PHONE_NUMBER,
@@ -125,11 +125,11 @@ class PostCustomerApiTest {
         .contentType(APPLICATION_JSON)
         .content(customerJson);
     mockMvc.perform(request)
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isInternalServerError());
   }
 
   @Test
-  void shouldReturnBadRequestWhenNomeMaxLengthIsInvalid() throws Exception {
+  void shouldReturnInternalServerErrorWhenNomeMaxLengthIsInvalid() throws Exception {
     var name = StringUtil.generateStringLength(501);
     var customer = new CustomerInputDto(DEFAULT_CUSTOMER_CPF, name,
         DEFAULT_CUSTOMER_EMAIL, DEFAULT_CUSTOMER_PHONE_NUMBER,
@@ -141,12 +141,12 @@ class PostCustomerApiTest {
         .contentType(APPLICATION_JSON)
         .content(customerJson);
     mockMvc.perform(request)
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isInternalServerError());
   }
 
   @ParameterizedTest
   @NullAndEmptySource
-  void shouldReturnBadRequestWhenEmailIsNotPresent(String email) throws Exception {
+  void shouldReturnInternalServerErrorWhenEmailIsNotPresent(String email) throws Exception {
     var customer = new CustomerInputDto(DEFAULT_CUSTOMER_CPF, DEFAULT_CUSTOMER_NAME,
         email, DEFAULT_CUSTOMER_PHONE_NUMBER,
         DEFAULT_CUSTOMER_STREET, DEFAULT_CUSTOMER_CITY, DEFAULT_CUSTOMER_STATE,
@@ -157,11 +157,11 @@ class PostCustomerApiTest {
         .contentType(APPLICATION_JSON)
         .content(customerJson);
     mockMvc.perform(request)
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isInternalServerError());
   }
 
   @Test
-  void shouldReturnBadRequestWhenEmailMinLengthIsInvalid() throws Exception {
+  void shouldReturnInternalServerErrorWhenEmailMinLengthIsInvalid() throws Exception {
     var email = "A";
     var customer = new CustomerInputDto(DEFAULT_CUSTOMER_CPF, DEFAULT_CUSTOMER_NAME,
         email, DEFAULT_CUSTOMER_PHONE_NUMBER,
@@ -173,11 +173,11 @@ class PostCustomerApiTest {
         .contentType(APPLICATION_JSON)
         .content(customerJson);
     mockMvc.perform(request)
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isInternalServerError());
   }
 
   @Test
-  void shouldReturnBadRequestWhenEmailMaxLengthIsInvalid() throws Exception {
+  void shouldReturnInternalServerErrorWhenEmailMaxLengthIsInvalid() throws Exception {
     var email = StringUtil.generateStringLength(501);
     var customer = new CustomerInputDto(DEFAULT_CUSTOMER_CPF, DEFAULT_CUSTOMER_NAME,
         email, DEFAULT_CUSTOMER_PHONE_NUMBER,
@@ -189,13 +189,13 @@ class PostCustomerApiTest {
         .contentType(APPLICATION_JSON)
         .content(customerJson);
     mockMvc.perform(request)
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isInternalServerError());
   }
 
   @ParameterizedTest
   @ValueSource(strings = {"email.domain.com", " email.domain.com", "@", "1", "email@domain",
       "A@b@c@example.com", "a\"b(c)d,e:f;g<h>i[j\\k]l@example.com", "email @example.com"})
-  void shouldReturnBadRequestWhenEmailIsInvalid(String email) throws Exception {
+  void shouldReturnInternalServerErrorWhenEmailIsInvalid(String email) throws Exception {
     var customer = new CustomerInputDto(DEFAULT_CUSTOMER_CPF, DEFAULT_CUSTOMER_NAME,
         email, DEFAULT_CUSTOMER_PHONE_NUMBER,
         DEFAULT_CUSTOMER_STREET, DEFAULT_CUSTOMER_CITY, DEFAULT_CUSTOMER_STATE,
@@ -206,12 +206,12 @@ class PostCustomerApiTest {
         .contentType(APPLICATION_JSON)
         .content(customerJson);
     mockMvc.perform(request)
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isInternalServerError());
   }
 
   @ParameterizedTest
   @NullAndEmptySource
-  void shouldReturnBadRequestWhenTelefoneIsNotPresent(String telefone) throws Exception {
+  void shouldReturnInternalServerErrorWhenTelefoneIsNotPresent(String telefone) throws Exception {
     var customer = new CustomerInputDto(DEFAULT_CUSTOMER_CPF, DEFAULT_CUSTOMER_NAME,
         DEFAULT_CUSTOMER_EMAIL, telefone,
         DEFAULT_CUSTOMER_STREET, DEFAULT_CUSTOMER_CITY, DEFAULT_CUSTOMER_STATE,
@@ -222,7 +222,7 @@ class PostCustomerApiTest {
         .contentType(APPLICATION_JSON)
         .content(customerJson);
     mockMvc.perform(request)
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isInternalServerError());
   }
 
   @Test

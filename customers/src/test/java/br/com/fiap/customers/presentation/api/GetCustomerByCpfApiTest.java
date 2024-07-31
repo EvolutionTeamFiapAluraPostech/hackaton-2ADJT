@@ -32,10 +32,10 @@ class GetCustomerByCpfApiTest {
 
   @ParameterizedTest
   @ValueSource(strings = {"72387289316", "189391810Ba", "123.456.789-01"})
-  void shouldReturnBadRequestWhenCustomerCpfIsInvalid(String cpf) throws Exception {
+  void shouldReturnInternalServerErrorWhenCustomerCpfIsInvalid(String cpf) throws Exception {
     var request = get(URL_CUSTOMERS, cpf);
     mockMvc.perform(request)
-        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andExpect(MockMvcResultMatchers.status().isInternalServerError())
         .andExpect(content().contentType(APPLICATION_JSON));
   }
 

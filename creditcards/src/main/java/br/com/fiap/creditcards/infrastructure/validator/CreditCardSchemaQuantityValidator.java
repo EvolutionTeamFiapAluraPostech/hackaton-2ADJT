@@ -4,7 +4,7 @@ import static br.com.fiap.creditcards.domain.valueobject.Cpf.CPF_FIELD;
 
 import br.com.fiap.creditcards.application.gateway.CreditCardGateway;
 import br.com.fiap.creditcards.application.validator.CreditCardQuantityValidator;
-import br.com.fiap.creditcards.domain.exception.ValidatorException;
+import br.com.fiap.creditcards.domain.exception.CreditCardMaxQuantityReachedException;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.FieldError;
 
@@ -23,8 +23,9 @@ public class CreditCardSchemaQuantityValidator implements CreditCardQuantityVali
   public void validate(String cpf) {
     var creditCards = creditCardGateway.findByCpf(cpf);
     if (!creditCards.isEmpty() && creditCards.size() == CREDIT_CARD_VALID_QUANTITY) {
-      throw new ValidatorException(new FieldError(this.getClass().getSimpleName(), CPF_FIELD,
-          CREDIT_CARD_VALID_MESSAGE.formatted(CREDIT_CARD_VALID_QUANTITY)));
+      throw new CreditCardMaxQuantityReachedException(
+          new FieldError(this.getClass().getSimpleName(), CPF_FIELD,
+              CREDIT_CARD_VALID_MESSAGE.formatted(CREDIT_CARD_VALID_QUANTITY)));
     }
   }
 }

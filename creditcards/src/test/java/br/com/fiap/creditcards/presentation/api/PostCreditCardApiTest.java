@@ -15,6 +15,7 @@ import br.com.fiap.creditcards.presentation.dto.CreditCardInputDto;
 import br.com.fiap.creditcards.shared.annotation.DatabaseTest;
 import br.com.fiap.creditcards.shared.annotation.IntegrationTest;
 import br.com.fiap.creditcards.shared.api.JsonUtil;
+import br.com.fiap.creditcards.shared.testdata.CreditCardTestData;
 import br.com.fiap.creditcards.shared.util.StringUtil;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import jakarta.persistence.EntityManager;
@@ -161,6 +162,23 @@ class PostCreditCardApiTest {
         .content(creditCardJson);
     mockMvc.perform(request)
         .andExpect(status().isConflict());
+  }
+
+  @Test
+  void shouldReturnForbiddenWhenCreditCardMaxQuantityWasReached() throws Exception {
+    var creditCard = CreditCardTestData.createNewCreditCard();
+    var creditCardSchema = CreditCardTestData.createNewCreditCardSchemaFrom(creditCard);
+    creditCardSchema.setNumber("1234123456785678");
+    entityManager.persist(creditCardSchema);
+    var creditCardInputDto = new CreditCardInputDto(DEFAULT_CREDIT_CARD_CPF, DEFAULT_CREDIT_CARD_LIMIT,
+        ALTERNATIVE_CREDIT_CARD_NUMBER, DEFAULT_CREDIT_CARD_EXPIRATION_DATE, DEFAULT_CREDIT_CARD_CVV);
+    var creditCardJson = JsonUtil.toJson(creditCardInputDto);
+
+    var request = post(URL_CREDITCARDS)
+        .contentType(APPLICATION_JSON)
+        .content(creditCardJson);
+    mockMvc.perform(request)
+        .andExpect(status().isForbidden());
   }
 
   @Test

@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 import br.com.fiap.creditcards.application.gateway.CreditCardGateway;
-import br.com.fiap.creditcards.domain.exception.ValidatorException;
+import br.com.fiap.creditcards.domain.exception.CreditCardMaxQuantityReachedException;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +34,7 @@ class CreditCardSchemaQuantityValidatorTest {
 
     assertThatThrownBy(
         () -> creditCardSchemaQuantityValidator.validate(DEFAULT_CREDIT_CARD_CPF))
-        .isInstanceOf(ValidatorException.class)
+        .isInstanceOf(CreditCardMaxQuantityReachedException.class)
         .hasMessage(CREDIT_CARD_VALID_MESSAGE.formatted(CREDIT_CARD_VALID_QUANTITY));
   }
 

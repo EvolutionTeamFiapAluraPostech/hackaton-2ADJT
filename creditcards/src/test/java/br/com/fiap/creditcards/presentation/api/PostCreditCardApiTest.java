@@ -1,7 +1,17 @@
 package br.com.fiap.creditcards.presentation.api;
 
+import static br.com.fiap.creditcards.shared.testdata.CreditCardTestData.DEFAULT_CREDIT_CARD_CVV;
+import static br.com.fiap.creditcards.shared.testdata.CreditCardTestData.DEFAULT_CREDIT_CARD_EXPIRATION_DATE;
+import static br.com.fiap.creditcards.shared.testdata.CreditCardTestData.DEFAULT_CREDIT_CARD_LIMIT;
+import static br.com.fiap.creditcards.shared.testdata.CreditCardTestData.DEFAULT_CREDIT_CARD_NUMBER;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import br.com.fiap.creditcards.presentation.dto.CreditCardInputDto;
 import br.com.fiap.creditcards.shared.annotation.DatabaseTest;
 import br.com.fiap.creditcards.shared.annotation.IntegrationTest;
+import br.com.fiap.creditcards.shared.api.JsonUtil;
 import br.com.fiap.creditcards.shared.util.StringUtil;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import jakarta.persistence.EntityManager;
@@ -30,8 +40,17 @@ class PostCreditCardApiTest {
 
   @ParameterizedTest
   @NullAndEmptySource
-  void shouldReturnBadRequestWhenCpfIsNullOrEmpty(String cpf) {
-    Assertions.fail("shouldReturnBadRequestWhenCpfIsNullOrEmpty");
+  void shouldReturnBadRequestWhenCpfIsNullOrEmpty(String cpf) throws Exception {
+    var creditCard = new CreditCardInputDto(cpf, DEFAULT_CREDIT_CARD_LIMIT,
+        DEFAULT_CREDIT_CARD_NUMBER, DEFAULT_CREDIT_CARD_EXPIRATION_DATE,
+        DEFAULT_CREDIT_CARD_CVV);
+    var creditCardJson = JsonUtil.toJson(creditCard);
+
+    var request = post(URL_CREDITCARDS)
+        .contentType(APPLICATION_JSON)
+        .content(creditCardJson);
+    mockMvc.perform(request)
+        .andExpect(status().isBadRequest());
   }
 
   @ParameterizedTest

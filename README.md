@@ -166,7 +166,7 @@ O objetivo deste microsserviço é realizar o registro de um cliente.
 
 # Microsserviço de clientes - Resultado dos testes
 
-163 testes de integração e unidade, executados em 2 segudos, com 100% de classes e 92% de linhas de código cobertas.
+166 testes de integração e unidade, executados em 2 segudos, com 100% de classes e 93% de linhas de código cobertas.
 
 ![alt text](./img/cliente_cobertura_testes.png)
 
@@ -185,8 +185,8 @@ O objetivo deste microsserviço é realizar o registro de cartões de crédito d
 
         * Regras de negócio:
             * Atributos cpf, limite, número do cartão, data de validade e cvv obrigatórios;
-            * Validação do número do cpf;
-            * O valor do limite deve ser maior que zero.
+            * Validação do número do cpf existente no microsserviço de clientes;
+            * O valor do limite deve ser maior ou igual a zero.
             * O número do cartão deve ter 16 dígitos.
             * O número do cartão deve ser único.
             * É permitido apenas dois cartões por cpf.

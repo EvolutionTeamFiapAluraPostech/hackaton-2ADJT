@@ -19,7 +19,7 @@ import lombok.experimental.SuperBuilder;
 public class CreditCardSchema extends BaseSchema {
 
   private String cpf;
-  private BigDecimal limit;
+  private BigDecimal limitValue;
   private String number;
   private String expirationDate;
   private String cvv;

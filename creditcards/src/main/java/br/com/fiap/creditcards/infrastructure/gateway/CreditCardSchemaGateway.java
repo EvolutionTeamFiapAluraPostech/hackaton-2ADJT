@@ -43,7 +43,7 @@ public class CreditCardSchemaGateway implements CreditCardGateway {
   private CreditCard getCreditCardFrom(CreditCardSchema creditCardSaved) {
     return new CreditCard(creditCardSaved.getId().toString(),
         creditCardSaved.getCpf(),
-        String.valueOf(creditCardSaved.getLimit()),
+        String.valueOf(creditCardSaved.getLimitValue()),
         creditCardSaved.getNumber(),
         creditCardSaved.getExpirationDate(),
         creditCardSaved.getCvv());
@@ -52,7 +52,7 @@ public class CreditCardSchemaGateway implements CreditCardGateway {
   private static CreditCardSchema createNewCreditCardSchemaFrom(CreditCard creditCard) {
     return CreditCardSchema.builder()
         .cpf(creditCard.getCpf())
-        .limit(new BigDecimal(creditCard.getLimit()))
+        .limitValue(new BigDecimal(creditCard.getLimit()))
         .number(creditCard.getNumber())
         .expirationDate(creditCard.getExpirationDate())
         .cvv(creditCard.getCvv())

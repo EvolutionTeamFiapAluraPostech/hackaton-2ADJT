@@ -1,6 +1,7 @@
 package br.com.fiap.creditcards.domain.valueobject;
 
 import static br.com.fiap.creditcards.domain.valueobject.CreditCardNumber.NUMBER_LENGTH;
+import static br.com.fiap.creditcards.domain.valueobject.CreditCardNumber.NUMBER_VALUE_ACCEPTS_ONLY_NUMBER_MESSAGE;
 import static br.com.fiap.creditcards.domain.valueobject.CreditCardNumber.NUMBER_VALUE_CANNOT_BE_NULL_OR_EMPTY_MESSAGE;
 import static br.com.fiap.creditcards.domain.valueobject.CreditCardNumber.NUMBER_VALUE_LENGTH_INVALID_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -20,6 +21,14 @@ class CreditCardNumberTest {
     assertThatThrownBy(() -> new CreditCardNumber(number))
         .isInstanceOf(ValidatorException.class)
         .hasMessage(NUMBER_VALUE_CANNOT_BE_NULL_OR_EMPTY_MESSAGE.formatted(number));
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"ABCD", "123456789012AbCD"})
+  void shouldThrowValidatorExceptionWhenCreditCardNumberHasAlfaCharacters(String number) {
+    assertThatThrownBy(() -> new CreditCardNumber(number))
+        .isInstanceOf(ValidatorException.class)
+        .hasMessage(NUMBER_VALUE_ACCEPTS_ONLY_NUMBER_MESSAGE.formatted(number));
   }
 
   @ParameterizedTest

@@ -18,6 +18,6 @@ public class GetCustomerByCpfInteractor implements GetCustomerByCpfUseCase {
   @Override
   public Customer execute(String cpfParam) {
     var cpf = new Cpf(cpfParam);
-    return customerGateway.findByCpf(cpf.getCpfValue());
+    return customerGateway.findByCpfRequired(cpf.getCpfValue());
   }
 }

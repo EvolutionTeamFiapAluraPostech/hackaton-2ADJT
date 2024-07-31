@@ -5,9 +5,11 @@ import static br.com.fiap.customers.shared.testdata.CustomerTestData.createCusto
 import static br.com.fiap.customers.shared.testdata.CustomerTestData.createCustomerSchemaPersistedFrom;
 import static br.com.fiap.customers.shared.testdata.CustomerTestData.createNewCustomer;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
+import br.com.fiap.customers.domain.exception.NoResultException;
 import br.com.fiap.customers.infrastructure.repository.CustomerSchemaRepository;
 import br.com.fiap.customers.infrastructure.schema.CustomerSchema;
 import java.util.Optional;
@@ -57,8 +59,31 @@ class CustomerSchemaGatewayTest {
   void shouldReturnNullWhenCustomerWasNotFoundByCpf() {
     when(customerSchemaRepository.findByCpf(DEFAULT_CUSTOMER_CPF)).thenReturn(Optional.empty());
 
-    var customerFound = customerSchemaGateway.findByCpf(DEFAULT_CUSTOMER_CPF);
+    var customer = customerSchemaGateway.findByCpf(DEFAULT_CUSTOMER_CPF);
 
-    assertThat(customerFound).isNull();
+    assertThat(customer).isNull();
+  }
+
+  @Test
+  void shouldFindCustomerByCpfRequired() {
+    var customer = createCustomer();
+    var customerSchema = createCustomerSchemaPersistedFrom(customer);
+    when(customerSchemaRepository.findByCpf(customer.getCpf())).thenReturn(
+        Optional.of(customerSchema));
+
+    var customerFound = customerSchemaGateway.findByCpfRequired(customer.getCpf());
+
+    assertThat(customerFound).isNotNull();
+    assertThat(customerFound.getId()).isNotNull();
+    assertThat(customerFound).usingRecursiveComparison().isEqualTo(customer);
+  }
+
+  @Test
+  void shouldReturnNullWhenCustomerWasNotFoundByCpfRequired() {
+    when(customerSchemaRepository.findByCpf(DEFAULT_CUSTOMER_CPF)).thenThrow(
+        NoResultException.class);
+
+    assertThatThrownBy(() -> customerSchemaGateway.findByCpfRequired(DEFAULT_CUSTOMER_CPF))
+        .isInstanceOf(NoResultException.class);
   }
 }

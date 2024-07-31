@@ -1,5 +1,6 @@
 package br.com.fiap.customers.domain.valueobject;
 
+import static br.com.fiap.customers.domain.valueobject.PostalCode.POSTAL_CODE_ACCEPT_ONLY_NUMBERS;
 import static br.com.fiap.customers.domain.valueobject.PostalCode.POSTAL_CODE_FIELD_MAX_LENGTH;
 import static br.com.fiap.customers.domain.valueobject.PostalCode.POSTAL_CODE_MAX_LENGTH_IS_8_YOU_TYPED_MESSAGE;
 import static br.com.fiap.customers.shared.testdata.CustomerTestData.DEFAULT_CUSTOMER_POSTAL_CODE;
@@ -23,6 +24,14 @@ class PostalCodeTest {
         .isInstanceOf(ValidatorException.class)
         .hasMessage(POSTAL_CODE_MAX_LENGTH_IS_8_YOU_TYPED_MESSAGE.formatted(POSTAL_CODE_FIELD_MAX_LENGTH,
             postalCodeLength));
+  }
+
+  @Test
+  void shouldThrowValidatorExceptionWhenPostalCodeHasAlfaCharacters() {
+    var postalCode = "1234567A";
+    assertThatThrownBy(() -> new PostalCode(postalCode))
+        .isInstanceOf(ValidatorException.class)
+        .hasMessage(POSTAL_CODE_ACCEPT_ONLY_NUMBERS.formatted(postalCode));
   }
 
   @ParameterizedTest

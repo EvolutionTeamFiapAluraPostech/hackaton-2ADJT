@@ -1,12 +1,12 @@
 package br.com.fiap.customers.infrastructure.usecase;
 
+import static br.com.fiap.customers.shared.testdata.CustomerTestData.createCustomer;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 import br.com.fiap.customers.application.gateway.CustomerGateway;
 import br.com.fiap.customers.domain.exception.ValidatorException;
-import br.com.fiap.customers.shared.testdata.CustomerTestData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -34,8 +34,8 @@ class GetCustomerByCpfInteractorTest {
 
   @Test
   void shouldGetCustomerWhenCustomerWasFoundByCpf() {
-    var customer = CustomerTestData.createCustomer();
-    when(customerGateway.findByCpf(customer.getCpf())).thenReturn(customer);
+    var customer = createCustomer();
+    when(customerGateway.findByCpfRequired(customer.getCpf())).thenReturn(customer);
 
     var customerFoundByCpf = getCustomerByCpfInteractor.execute(customer.getCpf());
 

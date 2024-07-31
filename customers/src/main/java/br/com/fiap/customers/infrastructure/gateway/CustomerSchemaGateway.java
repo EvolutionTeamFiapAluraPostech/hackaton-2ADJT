@@ -11,7 +11,7 @@ import org.springframework.validation.FieldError;
 @Service
 public class CustomerSchemaGateway implements CustomerGateway {
 
-  public static final String CLIENTE_NÃO_ENCONTRADO_COM_ESTE_CPF_MESSAGE = "Cliente não encontrado com este cpf. %s";
+  public static final String CLIENTE_NAO_ENCONTRADO_COM_ESTE_CPF_MESSAGE = "Cliente não encontrado com este cpf. %s";
   public static final String CPF_FIELD = "cpf";
   private final CustomerSchemaRepository customerSchemaRepository;
 
@@ -29,9 +29,15 @@ public class CustomerSchemaGateway implements CustomerGateway {
   @Override
   public Customer findByCpf(String cpf) {
     var customerSchema = customerSchemaRepository.findByCpf(cpf);
+    return customerSchema.map(this::getCustomerFrom).orElse(null);
+  }
+
+  @Override
+  public Customer findByCpfRequired(String cpf) {
+    var customerSchema = customerSchemaRepository.findByCpf(cpf);
     return customerSchema.map(this::getCustomerFrom).orElseThrow(
         () -> new NoResultException(new FieldError(this.getClass().getSimpleName(), CPF_FIELD,
-            CLIENTE_NÃO_ENCONTRADO_COM_ESTE_CPF_MESSAGE.formatted(cpf))));
+            CLIENTE_NAO_ENCONTRADO_COM_ESTE_CPF_MESSAGE.formatted(cpf))));
   }
 
   private Customer getCustomerFrom(CustomerSchema customerSchemaSaved) {

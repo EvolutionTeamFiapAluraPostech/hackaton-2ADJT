@@ -44,7 +44,7 @@ class PostCreditCardApiTest {
 
   @ParameterizedTest
   @NullAndEmptySource
-  void shouldReturnBadRequestWhenCpfIsNullOrEmpty(String cpf) throws Exception {
+  void shouldReturnInternalServerErrorWhenCpfIsNullOrEmpty(String cpf) throws Exception {
     var creditCard = new CreditCardInputDto(cpf, DEFAULT_CREDIT_CARD_LIMIT,
         DEFAULT_CREDIT_CARD_NUMBER, DEFAULT_CREDIT_CARD_EXPIRATION_DATE,
         DEFAULT_CREDIT_CARD_CVV);
@@ -54,12 +54,12 @@ class PostCreditCardApiTest {
         .contentType(APPLICATION_JSON)
         .content(creditCardJson);
     mockMvc.perform(request)
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isInternalServerError());
   }
 
   @ParameterizedTest
   @ValueSource(strings = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"})
-  void shouldReturnBadRequestWhenCpfIsInvalid(String number) throws Exception {
+  void shouldReturnInternalServerErrorWhenCpfIsInvalid(String number) throws Exception {
     var cpf = StringUtil.generateStringRepeatCharLength(number, 11);
     var creditCard = new CreditCardInputDto(cpf, DEFAULT_CREDIT_CARD_LIMIT,
         DEFAULT_CREDIT_CARD_NUMBER, DEFAULT_CREDIT_CARD_EXPIRATION_DATE,
@@ -70,12 +70,12 @@ class PostCreditCardApiTest {
         .contentType(APPLICATION_JSON)
         .content(creditCardJson);
     mockMvc.perform(request)
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isInternalServerError());
   }
 
   @ParameterizedTest
   @ValueSource(strings = {"72387289316", "18939181068", "12345678901", "A", "723.872.893-16"})
-  void shouldReturnBadRequestWhenCpfValueInvalid(String cpf) throws Exception {
+  void shouldReturnInternalServerErrorWhenCpfValueInvalid(String cpf) throws Exception {
     var creditCard = new CreditCardInputDto(cpf, DEFAULT_CREDIT_CARD_LIMIT,
         DEFAULT_CREDIT_CARD_NUMBER, DEFAULT_CREDIT_CARD_EXPIRATION_DATE,
         DEFAULT_CREDIT_CARD_CVV);
@@ -85,13 +85,13 @@ class PostCreditCardApiTest {
         .contentType(APPLICATION_JSON)
         .content(creditCardJson);
     mockMvc.perform(request)
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isInternalServerError());
   }
 
   @ParameterizedTest
   @NullAndEmptySource
   @ValueSource(strings = {"-1"})
-  void shouldReturnBadRequestWhenLimitIsInvalid(String limit) throws Exception {
+  void shouldReturnInternalServerErrorWhenLimitIsInvalid(String limit) throws Exception {
     var creditCard = new CreditCardInputDto(DEFAULT_CREDIT_CARD_CPF, limit,
         DEFAULT_CREDIT_CARD_NUMBER, DEFAULT_CREDIT_CARD_EXPIRATION_DATE,
         DEFAULT_CREDIT_CARD_CVV);
@@ -101,13 +101,13 @@ class PostCreditCardApiTest {
         .contentType(APPLICATION_JSON)
         .content(creditCardJson);
     mockMvc.perform(request)
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isInternalServerError());
   }
 
   @ParameterizedTest
   @NullAndEmptySource
   @ValueSource(strings = {"1234", "123456789012ABCD", "ABCD"})
-  void shouldReturnBadRequestWhenCreditCardNumberIsInvalid(String numberOfCreditCard)
+  void shouldReturnInternalServerErrorWhenCreditCardNumberIsInvalid(String numberOfCreditCard)
       throws Exception {
     var creditCard = new CreditCardInputDto(DEFAULT_CREDIT_CARD_CPF, DEFAULT_CREDIT_CARD_LIMIT,
         numberOfCreditCard, DEFAULT_CREDIT_CARD_EXPIRATION_DATE,
@@ -118,13 +118,13 @@ class PostCreditCardApiTest {
         .contentType(APPLICATION_JSON)
         .content(creditCardJson);
     mockMvc.perform(request)
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isInternalServerError());
   }
 
   @ParameterizedTest
   @NullAndEmptySource
   @ValueSource(strings = {"1234", "123456789012ABCD", "ABCD"})
-  void shouldReturnBadRequestWhenExpirationDateIsInvalid(String expirationDate) throws Exception {
+  void shouldReturnInternalServerErrorWhenExpirationDateIsInvalid(String expirationDate) throws Exception {
     var creditCard = new CreditCardInputDto(DEFAULT_CREDIT_CARD_CPF, DEFAULT_CREDIT_CARD_LIMIT,
         DEFAULT_CREDIT_CARD_NUMBER, expirationDate, DEFAULT_CREDIT_CARD_CVV);
     var creditCardJson = JsonUtil.toJson(creditCard);
@@ -133,13 +133,13 @@ class PostCreditCardApiTest {
         .contentType(APPLICATION_JSON)
         .content(creditCardJson);
     mockMvc.perform(request)
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isInternalServerError());
   }
 
   @ParameterizedTest
   @NullAndEmptySource
   @ValueSource(strings = {"1234", "123456789012ABCD", "ABCD"})
-  void shouldReturnBadRequestWhenCvvNumberIsInvalid(String cvvNumber) throws Exception {
+  void shouldReturnInternalServerErrorWhenCvvNumberIsInvalid(String cvvNumber) throws Exception {
     var creditCard = new CreditCardInputDto(DEFAULT_CREDIT_CARD_CPF, DEFAULT_CREDIT_CARD_LIMIT,
         DEFAULT_CREDIT_CARD_NUMBER, DEFAULT_CREDIT_CARD_EXPIRATION_DATE, cvvNumber);
     var creditCardJson = JsonUtil.toJson(creditCard);
@@ -148,11 +148,11 @@ class PostCreditCardApiTest {
         .contentType(APPLICATION_JSON)
         .content(creditCardJson);
     mockMvc.perform(request)
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isInternalServerError());
   }
 
   @Test
-  void shouldReturnConflictWhenCreditCardNumberWasAlreadyRegistered() throws Exception {
+  void shouldReturnInternalServerErrorWhenCreditCardNumberWasAlreadyRegistered() throws Exception {
     var creditCard = new CreditCardInputDto(DEFAULT_CREDIT_CARD_CPF, DEFAULT_CREDIT_CARD_LIMIT,
         DEFAULT_CREDIT_CARD_NUMBER, DEFAULT_CREDIT_CARD_EXPIRATION_DATE, DEFAULT_CREDIT_CARD_CVV);
     var creditCardJson = JsonUtil.toJson(creditCard);
@@ -161,7 +161,7 @@ class PostCreditCardApiTest {
         .contentType(APPLICATION_JSON)
         .content(creditCardJson);
     mockMvc.perform(request)
-        .andExpect(status().isConflict());
+        .andExpect(status().isInternalServerError());
   }
 
   @Test

@@ -16,19 +16,19 @@ public class ApiExceptionHandler {
   @ExceptionHandler(ValidatorException.class)
   public ResponseEntity<?> handlerValidatorException(ValidatorException exception) {
     var error = exception.getFieldError();
-    return ResponseEntity.badRequest().body(new ErrorDto(error));
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDto(error));
   }
 
   @ExceptionHandler(DuplicatedException.class)
   public ResponseEntity<?> handlerDuplicatedException(DuplicatedException exception) {
     var error = exception.getFieldError();
-    return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorDto(error));
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDto(error));
   }
 
   @ExceptionHandler(NoResultException.class)
   public ResponseEntity<?> handlerNoResultException(NoResultException exception) {
     var error = exception.getFieldError();
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorDto(error));
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDto(error));
   }
 
   @ExceptionHandler(CreditCardMaxQuantityReachedException.class)

@@ -1,5 +1,6 @@
 package br.com.fiap.creditcards.presentation.exception;
 
+import br.com.fiap.creditcards.domain.exception.CreditCardMaxQuantityReachedException;
 import br.com.fiap.creditcards.domain.exception.DuplicatedException;
 import br.com.fiap.creditcards.domain.exception.NoResultException;
 import br.com.fiap.creditcards.domain.exception.ValidatorException;
@@ -28,6 +29,13 @@ public class ApiExceptionHandler {
   public ResponseEntity<?> handlerNoResultException(NoResultException exception) {
     var error = exception.getFieldError();
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorDto(error));
+  }
+
+  @ExceptionHandler(CreditCardMaxQuantityReachedException.class)
+  public ResponseEntity<?> handlerCreditCardMaxQuantityReachedException(
+      CreditCardMaxQuantityReachedException exception) {
+    var error = exception.getFieldError();
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorDto(error));
   }
 
   @ExceptionHandler(Exception.class)

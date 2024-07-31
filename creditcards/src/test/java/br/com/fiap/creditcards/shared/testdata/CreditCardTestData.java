@@ -38,7 +38,7 @@ public final class CreditCardTestData {
     return CreditCardSchema.builder()
         .id(null)
         .cpf(creditCard.getCpf())
-        .limit(new BigDecimal(creditCard.getLimit()))
+        .limitValue(new BigDecimal(creditCard.getLimit()))
         .number(creditCard.getNumber())
         .expirationDate(creditCard.getExpirationDate())
         .cvv(creditCard.getCvv())

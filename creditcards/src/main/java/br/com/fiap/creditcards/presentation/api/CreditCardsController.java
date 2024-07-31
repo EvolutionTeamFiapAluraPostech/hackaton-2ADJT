@@ -23,6 +23,6 @@ public class CreditCardsController implements CreditCardsApi {
   @ResponseStatus(HttpStatus.OK)
   @Override
   public void postCreditCard(@RequestBody CreditCardInputDto creditCardInputDto) {
-
+    createCreditCardUseCase.execute(creditCardInputDto);
   }
 }

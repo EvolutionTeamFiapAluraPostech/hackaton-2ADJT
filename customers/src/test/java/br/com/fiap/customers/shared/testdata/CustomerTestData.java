@@ -22,21 +22,27 @@ public final class CustomerTestData {
 
   public static CustomerInputDto createCustomerInputDto() {
     return new CustomerInputDto(DEFAULT_CUSTOMER_CPF, DEFAULT_CUSTOMER_NAME,
-        DEFAULT_CUSTOMER_EMAIL,DEFAULT_CUSTOMER_PHONE_NUMBER,DEFAULT_CUSTOMER_STREET,
+        DEFAULT_CUSTOMER_EMAIL, DEFAULT_CUSTOMER_PHONE_NUMBER, DEFAULT_CUSTOMER_STREET,
         DEFAULT_CUSTOMER_CITY, DEFAULT_CUSTOMER_STATE,
         DEFAULT_CUSTOMER_POSTAL_CODE, DEFAULT_CUSTOMER_COUNTRY);
   }
 
   public static Customer createNewCustomer() {
-    return new Customer(DEFAULT_CUSTOMER_NAME, DEFAULT_CUSTOMER_CPF, DEFAULT_CUSTOMER_EMAIL,
-        DEFAULT_CUSTOMER_PHONE_NUMBER,DEFAULT_CUSTOMER_STREET,
+    return createNewCustomer(DEFAULT_CUSTOMER_NAME, DEFAULT_CUSTOMER_CPF, DEFAULT_CUSTOMER_EMAIL,
+        DEFAULT_CUSTOMER_PHONE_NUMBER, DEFAULT_CUSTOMER_STREET,
         DEFAULT_CUSTOMER_CITY, DEFAULT_CUSTOMER_STATE,
         DEFAULT_CUSTOMER_COUNTRY, DEFAULT_CUSTOMER_POSTAL_CODE);
   }
 
+  public static Customer createNewCustomer(String name, String cpf, String email,
+      String phoneNumber, String street, String city, String state, String country,
+      String postalCode) {
+    return new Customer(name, cpf, email, phoneNumber, street, city, state, country, postalCode);
+  }
+
   public static Customer createCustomer() {
     return new Customer(DEFAULT_CUSTOMER_ID, DEFAULT_CUSTOMER_NAME, DEFAULT_CUSTOMER_CPF,
-        DEFAULT_CUSTOMER_EMAIL,DEFAULT_CUSTOMER_PHONE_NUMBER,DEFAULT_CUSTOMER_STREET,
+        DEFAULT_CUSTOMER_EMAIL, DEFAULT_CUSTOMER_PHONE_NUMBER, DEFAULT_CUSTOMER_STREET,
         DEFAULT_CUSTOMER_CITY, DEFAULT_CUSTOMER_STATE,
         DEFAULT_CUSTOMER_COUNTRY, DEFAULT_CUSTOMER_POSTAL_CODE);
   }
@@ -61,6 +67,6 @@ public final class CustomerTestData {
     return customerSchema;
   }
 
-  private CustomerTestData(){
+  private CustomerTestData() {
   }
 }

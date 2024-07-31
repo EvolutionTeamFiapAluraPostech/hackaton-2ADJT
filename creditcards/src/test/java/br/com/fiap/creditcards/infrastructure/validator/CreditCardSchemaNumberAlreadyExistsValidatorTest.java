@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 import br.com.fiap.creditcards.application.gateway.CreditCardGateway;
-import br.com.fiap.creditcards.domain.exception.ValidatorException;
+import br.com.fiap.creditcards.domain.exception.DuplicatedException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,7 +30,7 @@ class CreditCardSchemaNumberAlreadyExistsValidatorTest {
 
     assertThatThrownBy(
         () -> creditCardSchemaNumberAlreadyExistsValidator.validate(DEFAULT_CREDIT_CARD_NUMBER))
-        .isInstanceOf(ValidatorException.class)
+        .isInstanceOf(DuplicatedException.class)
         .hasMessage(CREDIT_CARD_ALREADY_EXISTS.formatted(DEFAULT_CREDIT_CARD_NUMBER));
   }
 

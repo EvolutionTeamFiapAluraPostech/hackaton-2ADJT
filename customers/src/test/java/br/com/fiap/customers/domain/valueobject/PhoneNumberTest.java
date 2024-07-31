@@ -4,8 +4,10 @@ import static br.com.fiap.customers.domain.valueobject.PhoneNumber.PHONE_NUMBER_
 import static br.com.fiap.customers.domain.valueobject.PhoneNumber.PHONE_NUMBER_NOT_NULL_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import br.com.fiap.customers.domain.exception.ValidatorException;
+import br.com.fiap.customers.shared.util.StringUtil;
 import org.junit.jupiter.api.Test;
 
 class PhoneNumberTest {
@@ -27,11 +29,23 @@ class PhoneNumberTest {
   }
 
   @Test
+  void shouldThrowValidatorExceptionWhenPhoneNumberMinLengthIsInvalid() {
+    var phoneNumber = "123456";
+    assertThrows(ValidatorException.class, () -> new PhoneNumber(phoneNumber));
+  }
+
+  @Test
+  void shouldThrowExceptionWhenEmailMaxLengthIsInvalid() {
+    var phoneNumber = StringUtil.generateStringLength(51);
+    assertThrows(ValidatorException.class, () -> new PhoneNumber(phoneNumber));
+  }
+
+  @Test
   void shouldValidatePhoneNumber() {
     var phoneNumber = new PhoneNumber(VALID_PHONE_NUMBER);
 
     assertThat(phoneNumber).isNotNull();
-    assertThat(phoneNumber.phoneNumberValue()).isNotNull().isNotEmpty();
-    assertThat(phoneNumber.phoneNumberValue()).isEqualTo(VALID_PHONE_NUMBER);
+    assertThat(phoneNumber.getPhoneNumberValue()).isNotNull().isNotEmpty();
+    assertThat(phoneNumber.getPhoneNumberValue()).isEqualTo(VALID_PHONE_NUMBER);
   }
 }

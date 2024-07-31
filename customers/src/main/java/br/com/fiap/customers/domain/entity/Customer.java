@@ -33,8 +33,8 @@ public class Customer {
     this.id = id;
     this.name = new CustomerName(name).getName();
     this.cpf = new Cpf(cpf).getCpfValue();
-    this.email = new Email(email).address();
-    this.phoneNumber = new PhoneNumber(phoneNumber).phoneNumberValue();
+    this.email = new Email(email).getAddress();
+    this.phoneNumber = new PhoneNumber(phoneNumber).getPhoneNumberValue();
     this.street = new Street(street).getStreetValue();
     this.city = new City(city).getCityValue();
     this.state = new State(state).getStateValue();

@@ -3,6 +3,7 @@ package br.com.fiap.customers.domain.valueobject;
 import static org.junit.jupiter.api.Assertions.*;
 
 import br.com.fiap.customers.domain.exception.ValidatorException;
+import br.com.fiap.customers.shared.util.StringUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
@@ -15,6 +16,18 @@ class EmailTest {
   @Test
   void shouldCreateEmail() {
     assertDoesNotThrow(() -> new Email(DEFAULT_USER_EMAIL));
+  }
+
+  @Test
+  void shouldThrowExceptionWhenEmailMinLengthIsInvalid() {
+    var email = "a@b.c";
+    assertThrows(ValidatorException.class, () -> new Email(email));
+  }
+
+  @Test
+  void shouldThrowExceptionWhenEmailMaxLengthIsInvalid() {
+    var email = StringUtil.generateStringLength(501);
+    assertThrows(ValidatorException.class, () -> new Email(email));
   }
 
   @ParameterizedTest

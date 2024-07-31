@@ -32,9 +32,18 @@ class CpfTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "12", "13"})
+  @ValueSource(strings = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"})
   void shouldThrowValidatorExceptionWhenCpfValueMinLengthIsInvalid(String cpfValueMinLength) {
     var cpfValue = StringUtil.generateStringRepeatCharLength(cpfValueMinLength, Integer.valueOf(cpfValueMinLength));
+    var cpfLength = cpfValue.length();
+    assertThatThrownBy(() -> new Cpf(cpfValue))
+        .isInstanceOf(ValidatorException.class)
+        .hasMessage(CPF_LENGTH_INVALID_MESSAGE.formatted(cpfLength));
+  }
+
+  @Test
+  void shouldThrowValidatorExceptionWhenCpfValueMaxLengthIsInvalid() {
+    var cpfValue = StringUtil.generateStringRepeatCharLength("1", 12);
     var cpfLength = cpfValue.length();
     assertThatThrownBy(() -> new Cpf(cpfValue))
         .isInstanceOf(ValidatorException.class)

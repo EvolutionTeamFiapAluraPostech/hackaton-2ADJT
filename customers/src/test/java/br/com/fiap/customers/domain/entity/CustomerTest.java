@@ -22,7 +22,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class CustomerTest {
 
-
   @ParameterizedTest
   @NullAndEmptySource
   @ValueSource(strings = {"A"})

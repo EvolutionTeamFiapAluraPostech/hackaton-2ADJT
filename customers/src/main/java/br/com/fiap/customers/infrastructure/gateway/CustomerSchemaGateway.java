@@ -2,13 +2,17 @@ package br.com.fiap.customers.infrastructure.gateway;
 
 import br.com.fiap.customers.application.gateway.CustomerGateway;
 import br.com.fiap.customers.domain.entity.Customer;
+import br.com.fiap.customers.domain.exception.NoResultException;
 import br.com.fiap.customers.infrastructure.repository.CustomerSchemaRepository;
 import br.com.fiap.customers.infrastructure.schema.CustomerSchema;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.FieldError;
 
 @Service
 public class CustomerSchemaGateway implements CustomerGateway {
 
+  public static final String CLIENTE_NÃO_ENCONTRADO_COM_ESTE_CPF_MESSAGE = "Cliente não encontrado com este cpf. %s";
+  public static final String CPF_FIELD = "cpf";
   private final CustomerSchemaRepository customerSchemaRepository;
 
   public CustomerSchemaGateway(CustomerSchemaRepository customerSchemaRepository) {
@@ -25,7 +29,9 @@ public class CustomerSchemaGateway implements CustomerGateway {
   @Override
   public Customer findByCpf(String cpf) {
     var customerSchema = customerSchemaRepository.findByCpf(cpf);
-    return customerSchema.map(this::getCustomerFrom).orElse(null);
+    return customerSchema.map(this::getCustomerFrom).orElseThrow(
+        () -> new NoResultException(new FieldError(this.getClass().getSimpleName(), CPF_FIELD,
+            CLIENTE_NÃO_ENCONTRADO_COM_ESTE_CPF_MESSAGE.formatted(cpf))));
   }
 
   private Customer getCustomerFrom(CustomerSchema customerSchemaSaved) {

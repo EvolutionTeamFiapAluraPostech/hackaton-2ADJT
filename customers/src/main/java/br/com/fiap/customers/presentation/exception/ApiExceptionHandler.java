@@ -1,6 +1,7 @@
 package br.com.fiap.customers.presentation.exception;
 
 import br.com.fiap.customers.domain.exception.DuplicatedException;
+import br.com.fiap.customers.domain.exception.NoResultException;
 import br.com.fiap.customers.domain.exception.ValidatorException;
 import br.com.fiap.customers.presentation.dto.ErrorDto;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,12 @@ public class ApiExceptionHandler {
   public ResponseEntity<?> handlerValidatorException(ValidatorException exception) {
     var error = exception.getFieldError();
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDto(error));
+  }
+
+  @ExceptionHandler(NoResultException.class)
+  public ResponseEntity<?> handlerNoResultException(NoResultException exception) {
+    var error = exception.getFieldError();
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorDto(error));
   }
 
   @ExceptionHandler(Exception.class)

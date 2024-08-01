@@ -19,12 +19,17 @@ public interface CreditCardsApi {
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "successful operation",
           content = {
-              @Content(mediaType = "application/json", schema = @Schema(implementation = CreditCardInputDto.class))}),
+              @Content(mediaType = "application/json", schema = @Schema(implementation = CreditCardOutputDto.class))}),
       @ApiResponse(responseCode = "400",
           description = "bad request para validação de cpf, limite, número do cartão, data de validade e código de segurança.",
           content = {@Content(schema = @Schema(hidden = true))}),
       @ApiResponse(responseCode = "401", description = "unauthorized para usuário não autenticado", content = {
-          @Content(schema = @Schema(hidden = true))})
+          @Content(schema = @Schema(hidden = true))}),
+      @ApiResponse(responseCode = "403", description = "forbidden número máximo de cartões permitidos", content = {
+          @Content(schema = @Schema(hidden = true))}),
+      @ApiResponse(responseCode = "500",
+          description = "Internal Server Error para validação de cpf, limite, número do cartão, data de validade e código de segurança.",
+          content = {@Content(schema = @Schema(hidden = true))}),
   })
   void postCreditCard(CreditCardInputDto creditCardInputDto);
 
@@ -34,7 +39,7 @@ public interface CreditCardsApi {
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "successful operation",
           content = {
-              @Content(mediaType = "application/json", schema = @Schema(implementation = CreditCardInputDto.class))}),
+              @Content(mediaType = "application/json", schema = @Schema(implementation = CreditCardOutputDto.class))}),
       @ApiResponse(responseCode = "400",
           description = "bad request para validação de cpf.",
           content = {@Content(schema = @Schema(hidden = true))}),

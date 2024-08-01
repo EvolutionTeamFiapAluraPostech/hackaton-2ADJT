@@ -2,16 +2,22 @@ package br.com.fiap.creditcards.infrastructure.gateway;
 
 import br.com.fiap.creditcards.application.gateway.CreditCardGateway;
 import br.com.fiap.creditcards.domain.entity.CreditCard;
+import br.com.fiap.creditcards.domain.exception.NoResultException;
+import br.com.fiap.creditcards.domain.valueobject.Cpf;
+import br.com.fiap.creditcards.domain.valueobject.CreditCardNumber;
 import br.com.fiap.creditcards.infrastructure.repository.CreditCardRepository;
 import br.com.fiap.creditcards.infrastructure.schema.CreditCardSchema;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.FieldError;
 
 @Service
 public class CreditCardSchemaGateway implements CreditCardGateway {
 
+  public static final String CREDIT_CARD_NAO_ENCONTRADO_COM_ESTE_NUMERO_CPF_MESSAGE = "Cartão de crédito não encontrado com este número e cpf. Número %s e Cpf %s.";
+  public static final String CREDIT_CARD_NUMERO_CPF_FIELD = "número e cpf";
   private final CreditCardRepository creditCardRepository;
 
   public CreditCardSchemaGateway(CreditCardRepository creditCardRepository) {
@@ -38,6 +44,20 @@ public class CreditCardSchemaGateway implements CreditCardGateway {
       return Collections.emptyList();
     }
     return creditCardsSchema.stream().map(this::getCreditCardFrom).toList();
+  }
+
+  @Override
+  public CreditCard findByNumberAndCpfRequired(String creditCardNumberValue, String cpfValue) {
+    var creditCardNumber = new CreditCardNumber(creditCardNumberValue);
+    var cpf = new Cpf(cpfValue);
+    var creditCardSchemaOptional = creditCardRepository.findByNumberAndCpf(
+        creditCardNumber.getNumber(), cpf.getCpfValue());
+    return creditCardSchemaOptional.map(this::getCreditCardFrom).orElseThrow(
+        () -> new NoResultException(
+            new FieldError(this.getClass().getSimpleName(), CREDIT_CARD_NUMERO_CPF_FIELD,
+                CREDIT_CARD_NAO_ENCONTRADO_COM_ESTE_NUMERO_CPF_MESSAGE.formatted(
+                    creditCardNumber.getNumber(),
+                    cpf.getCpfValue()))));
   }
 
   private CreditCard getCreditCardFrom(CreditCardSchema creditCardSaved) {

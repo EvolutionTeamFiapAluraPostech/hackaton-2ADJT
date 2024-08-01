@@ -1,5 +1,5 @@
 services:
-  order-db:
+  creditcard-db:
     container_name: postgresql-creditcard
     image: postgres:latest
     environment:

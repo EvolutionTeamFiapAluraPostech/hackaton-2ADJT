@@ -10,4 +10,5 @@ public interface CreditCardRepository extends JpaRepository<CreditCardSchema, UU
 
   Optional<CreditCardSchema> findByNumber(String number);
   List<CreditCardSchema> findByCpf(String cpf);
+  Optional<CreditCardSchema> findByNumberAndCpf(String creditCardNumber, String cpf);
 }

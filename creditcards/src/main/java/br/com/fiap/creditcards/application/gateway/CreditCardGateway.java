@@ -10,4 +10,7 @@ public interface CreditCardGateway {
   CreditCard findByNumber(String number);
 
   List<CreditCard> findByCpf(String cpf);
+
+  CreditCard findByNumberAndCpfRequired
+      (String creditCardNumber, String cpf);
 }

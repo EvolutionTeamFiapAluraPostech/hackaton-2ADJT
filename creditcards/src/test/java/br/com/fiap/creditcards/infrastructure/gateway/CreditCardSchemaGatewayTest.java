@@ -1,13 +1,18 @@
 package br.com.fiap.creditcards.infrastructure.gateway;
 
+import static br.com.fiap.creditcards.shared.testdata.CreditCardTestData.DEFAULT_CREDIT_CARD_CPF;
+import static br.com.fiap.creditcards.shared.testdata.CreditCardTestData.DEFAULT_CREDIT_CARD_ID;
 import static br.com.fiap.creditcards.shared.testdata.CreditCardTestData.DEFAULT_CREDIT_CARD_NUMBER;
 import static br.com.fiap.creditcards.shared.testdata.CreditCardTestData.createCreditCard;
 import static br.com.fiap.creditcards.shared.testdata.CreditCardTestData.createCreditCardSchemaFrom;
 import static br.com.fiap.creditcards.shared.testdata.CreditCardTestData.createNewCreditCard;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import br.com.fiap.creditcards.domain.exception.NoResultException;
+import br.com.fiap.creditcards.domain.exception.ValidatorException;
 import br.com.fiap.creditcards.infrastructure.repository.CreditCardRepository;
 import br.com.fiap.creditcards.infrastructure.schema.CreditCardSchema;
 import java.util.Collections;
@@ -15,6 +20,9 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -83,5 +91,49 @@ class CreditCardSchemaGatewayTest {
     var creditCards = creditCardSchemaGateway.findByCpf(creditCard.getCpf());
 
     assertThat(creditCards).isEmpty();
+  }
+
+  @ParameterizedTest
+  @NullAndEmptySource
+  @ValueSource(strings = {"1234", "123456789012ABCD", "ABCD"})
+  void shouldThrowValidatorExceptionWhenCreditCardNumberIsInvalid(String creditCardNumber) {
+    assertThatThrownBy(() -> creditCardSchemaGateway.findByNumberAndCpfRequired(creditCardNumber,
+        DEFAULT_CREDIT_CARD_CPF))
+        .isInstanceOf(ValidatorException.class);
+  }
+
+  @ParameterizedTest
+  @NullAndEmptySource
+  @ValueSource(strings = {"72387289316", "18939181068", "12345678901", "A", "723.872.893-16"})
+  void shouldThrowNoValidatorExceptionWhenCreditCardCpfIsInvalid(String cpf) {
+    assertThatThrownBy(
+        () -> creditCardSchemaGateway.findByNumberAndCpfRequired(DEFAULT_CREDIT_CARD_NUMBER, cpf))
+        .isInstanceOf(ValidatorException.class);
+  }
+
+  @Test
+  void shouldThrowNoResultExceptionWhenCreditCardWasNotFoundByNumberAndCpf() {
+    when(creditCardRepository.findByNumberAndCpf(DEFAULT_CREDIT_CARD_NUMBER,
+        DEFAULT_CREDIT_CARD_CPF)).thenThrow(NoResultException.class);
+
+    assertThatThrownBy(
+        () -> creditCardSchemaGateway.findByNumberAndCpfRequired(DEFAULT_CREDIT_CARD_NUMBER,
+            DEFAULT_CREDIT_CARD_CPF))
+        .isInstanceOf(NoResultException.class);
+  }
+
+  @Test
+  void shouldFindCreditCardByNumberAndCpf() {
+    var creditCard = createCreditCard();
+    var creditCardSchema = createCreditCardSchemaFrom(creditCard);
+    when(creditCardRepository.findByNumberAndCpf(DEFAULT_CREDIT_CARD_NUMBER,
+        DEFAULT_CREDIT_CARD_CPF)).thenReturn(Optional.of(creditCardSchema));
+
+    var creditCardFound = creditCardSchemaGateway.findByNumberAndCpfRequired(DEFAULT_CREDIT_CARD_NUMBER,
+        DEFAULT_CREDIT_CARD_CPF);
+
+    assertThat(creditCardFound).isNotNull();
+    assertThat(creditCardFound.getId()).isNotNull().isEqualTo(DEFAULT_CREDIT_CARD_ID);
+    assertThat(creditCardFound).usingRecursiveComparison().isEqualTo(creditCard);
   }
 }

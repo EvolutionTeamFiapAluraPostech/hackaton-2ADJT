@@ -63,7 +63,7 @@ class PostCreditCardApiTest {
 
   @ParameterizedTest
   @ValueSource(strings = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"})
-  void shouldReturnInternalServerErrorWhenCpfIsInvalid(String number) throws Exception {
+  void shouldReturnInternalServerErrorWhenCpfLengthIsInvalid(String number) throws Exception {
     var cpf = StringUtil.generateStringRepeatCharLength(number, 11);
     var creditCard = new CreditCardInputDto(cpf, DEFAULT_CREDIT_CARD_LIMIT,
         DEFAULT_CREDIT_CARD_NUMBER, DEFAULT_CREDIT_CARD_EXPIRATION_DATE,

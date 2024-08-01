@@ -17,13 +17,13 @@ public interface CustomersApi {
       description = "Endpoint para cadastrar novos clientes.",
       tags = {"CustomersApi"})
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "201", description = "successful operation",
+      @ApiResponse(responseCode = "200", description = "successful operation",
           content = {
               @Content(mediaType = "application/json", schema = @Schema(implementation = CustomerInputDto.class))}),
-      @ApiResponse(responseCode = "400", description = "bad request para validação de cpf, nome, e-mail e telefone.",
-          content = {@Content(schema = @Schema(hidden = true))}),
       @ApiResponse(responseCode = "401", description = "unauthorized para usuário não autenticado", content = {
-          @Content(schema = @Schema(hidden = true))})
+          @Content(schema = @Schema(hidden = true))}),
+      @ApiResponse(responseCode = "500", description = "bad request para validação de cpf, nome, e-mail e telefone.",
+          content = {@Content(schema = @Schema(hidden = true))}),
   })
   CustomerOutputDto postCustomer(
       @Parameter(description = "DTO com atributos para se cadastrar um novo cliente. Requer validação de cpf, nome, e-mail e telefone.")

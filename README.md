@@ -232,7 +232,7 @@ Foi utilizado no projeto o flyway para criar a tabela de banco de dados e realiz
 
 O microsserviço de cartões de crédito realiza uma comunicação com o microsserviço de clientes, para verificar se o CPF existe. Esta comunicação poderia influenciar nos testes de integração, pois este realiza um teste iniciando do endpoint, passando pelas camadas internas da aplicação, realiza uma operação no banco de dados e por fim faz todo o caminho de volta, retornando o resultado do consumo do endpoint. Para que o teste seja independente do microsserviço de clientes, foi utilizado o WireMock no teste de integração para simular o microsserviço de clientes, sem que este esteja ativo.
 
-![alt text](image.png)
+![alt text](./img/cartaocredito_cobertura_testes.png)
 
 # Microsserviço de registro de pagamentos - API
 O objetivo deste microsserviço é realizar o registro de pagamentos de compras realizadas pelo cliente. 

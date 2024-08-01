@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: payments
+  jpa:
+    show-sql: true
+    database: postgresql
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5435/payments-db
+    username: payments-postgres-user
+    password: payments-postgres-pwd
+  flyway:
+    baseline-on-migrate: true
+    schemas: 'flyway'
+
+server:
+  port: 8083
+  error:
+    include-stacktrace: never
+
+api:
+  security:
+    token:
+      secret: ${API_SECURITY_TOKEN_SECRET:Fi@p-@lur@-2ADJT}
+
+base:
+  url:
+    http-customer: ${URL_CUSTOMER:http://localhost:8081}
+    http-creditcards: ${URL_CREDITCARDS:http://localhost:8082}

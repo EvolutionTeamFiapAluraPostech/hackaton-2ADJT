@@ -164,6 +164,10 @@ O objetivo deste microsserviço é realizar o registro de um cliente.
 
 ![alt text](./img/cliente_arquitetura.png)
 
+Foi utilizado no projeto o flyway para criar a tabela de banco de dados e realizar a inclusão de um cliente inicial, para facilitar testes automatizados e manuais.
+- id: dcd3398e-4988-4fba-b8c0-a649ae1ff677
+- cpf: 84527263846
+
 # Microsserviço de clientes - Resultado dos testes
 
 169 testes de integração e unidade, executados em 2 segudos, com 100% de classes e 91% de linhas de código cobertas.
@@ -195,6 +199,7 @@ O objetivo deste microsserviço é realizar o registro de cartões de crédito d
             * Status 401 - Unauthorized - se o usuário não foi autenticado;
             * Status 403 - para o número máximo de cartão atingido por cliente;
             * Status 500 - para um erro de negócio.
+
 * http://localhost:8082/api/cartao/{numero}/cliente/{cpf}
     * Verbo GET - para realizar a pesquisa de um cartão pelo número e pelo cpf do cliente. Será utilizado na validação do cartão pertencente ao cliente e o limite disponível no microserviço de registro de pagamentos.
         * Escopo: privado, requer autenticação.
@@ -216,9 +221,74 @@ O objetivo deste microsserviço é realizar o registro de cartões de crédito d
 
 ![alt text](./img/cartaocredito_arquitetura.png)
 
+Foi utilizado no projeto o flyway para criar a tabela de banco de dados e realizar a inclusão de um cartão de crédito inicial, vinculado ao cliente cadastrado no microsserviço de clientes, para facilitar testes automatizados e manuais.
+- id: fc9ca35f-e911-4bdd-9b73-a6ddc622d0fd
+- número: 1234567890123456
+- cpf: 84527263846
+
 # Microsserviço de cartões de crédito - Resultado dos testes
 
+160 testes de integração e unidade, executados em 2 segudos, com 100% de classes e 92% de linhas de código cobertas.
+
+O microsserviço de cartões de crédito realiza uma comunicação com o microsserviço de clientes, para verificar se o CPF existe. Esta comunicação poderia influenciar nos testes de integração, pois este realiza um teste iniciando do endpoint, passando pelas camadas internas da aplicação, realiza uma operação no banco de dados e por fim faz todo o caminho de volta, retornando o resultado do consumo do endpoint. Para que o teste seja independente do microsserviço de clientes, foi utilizado o WireMock no teste de integração para simular o microsserviço de clientes, sem que este esteja ativo.
+
+![alt text](image.png)
+
+# Microsserviço de registro de pagamentos - API
+O objetivo deste microsserviço é realizar o registro de pagamentos de compras realizadas pelo cliente. 
+* http://localhost:8083/api/pagamentos
+    * Verbo POST - para realizar o cadastro do pagamento da compra realizada pelo cliente.
+        * Escopo: privado, requer autenticação.
+        * Contrato:
+
+        ![alt text](./img/pagamento_request_body.png)
+
+        * Retorno:
+
+        ![alt text](./img/pagamento_response_body.png)
+
+        * Regras de negócio:
+            * Atributos cpf, número do cartão, data de validade, cvv e valor obrigatórios;
+            * Validação do cpf e número do cartão existente no microsserviço de clientes;
+            * Validação da validade do cartão;
+            * Validação do cvv do cartão;
+            * Validação do valor maior que zero;
+            * Validação do valor do pagamento esteja dentro do saldo do limite do cartão de crédito;
+            * Solicitar ao microsserviço de cartão de crédito a atualização do saldo do limite do cliente;
+        * Http response status do endpoint:
+            * Status: 200 para pagamento realizado com sucesso;
+            * Status: 401 para erro de autorização;
+            * Status: 402 para caso o limite do cartão foi superado;
+            * Status: 500 para um erro de negócio.
+
+* http://localhost:8083/api/pagamentos/cliente/{chave}
+    * Verbo GET - para realizar a pesquisa de pagamentos pelo ID do cliente. 
+        * Escopo: privado, requer autenticação.
+        * Retorno:
+
+        ![alt text](./img/pagamentos_consulta.png)
+
+        * Regras de negócio:
+            * O parâmetro ID do cliente é obrigatório.
+        * Http response status do endpoint:
+            * Status 200 - Ok - lista de pagamentos encontrada;
+            * Status 401 - Unauthorized - se o usuário não foi autenticado;
+            * Status 500 - para um erro de negócio.
+
+    * Documentação da API: http://localhost:8083/swagger-ui/index.html
+    * Banco de dados: http://localhost:5435/payments-db
+
+# Microsserviço de registro de pagamentos - Clean Architecture e Entity Diagram
+
+![alt text](./img/pagamento_arquitetura.png)
+
+Foi utilizado no projeto o flyway para criar a tabela de banco de dados.
+
+# Microsserviço de registro de pagamentos - Resultado dos testes
+
 135 testes de integração e unidade, executados em 2 segudos, com 100% de classes e 91% de linhas de código cobertas.
+
+O microsserviço de pagamentos realiza uma comunicação com o microsserviço de clientes e o microsserviço de cartões de crédito, para verificar se o cartão de crédito/CPF existe. Esta comunicação poderia influenciar nos testes de integração, pois este realiza um teste iniciando do endpoint, passando pelas camadas internas da aplicação, realiza uma operação no banco de dados e por fim faz todo o caminho de volta, retornando o resultado do consumo do endpoint. Para que o teste seja independente do microsserviço de clientes e de cartões de crédito, foi utilizado o WireMock no teste de integração para simular o microsserviço de clientes, sem que este esteja ativo.
 
 ![alt text](./img/cartaocredito_cobertura_testes.png)
 
@@ -234,6 +304,6 @@ Observe que as classes contidas na camada *Presentation* não conhecem as classe
 
 # Qualidade de software
 Para garantir a qualidade de software, foram implementados testes de unidade e de integração na grande maioria do código e teste de design arquitetural do projeto com o ArchUnit. Para identificar o que foi testado, utilizamos a cobertura de testes de código do próprio IntelliJ IDEA e o ArchUnit. O ArchUnit foi utilizado para identificar através de um teste a existência de testes correspondentes para as classes de serviço, use case, validators, identifica se as classes foram criadas respeitando a arquitetura/design do projeto (cada classe deverá ser criada em sua respectiva pasta, conforme seu objetivo, não é permitido injetar repositories em classes indevidas, métodos de use case que executam operações de escrita em banco de dados devem ser anotadas com @Transactional).
-Os testes de unidade foram implementados nas classes de domínio e application testando a menor unidade de código. Os testes de integração foram implementados nas classes de presentation, realizando a requisição HTTP aos endpoints em diversos cenários, testando o código por completo, da entrada dos dados, processamento e saída. O objetivo desta segregação foi considerar a eficiência dos testes versus o tempo de entrega do projeto. Aplicando este método, foi apurado pela cobertuda de testes do IntelliJ IDEA, em mais de 90% de classes testadas na maioria dos microserviços. A decisão de utilizar o próprio IntelliJ foi motivada pela manutenção de menor número de dependências a serem adicionadas no projeto, com o objetivo de reduzir possibilidades de libs externas abrirem uma fragilidade na segurança da aplicação (lembrando do caso do Log4J) e que no cenário em que o projeto foi desenvolvido não foi necessária a adição do Jacoco.  Para realizar o teste de cobertura, clique com o botão direito do mouse sobre o nome do projeto, navegue até a opção More Run/Debug, em seguida selecione a opção Run tests in <nome do projeto> with Coverage.
-As comunicações dentre microsserviços foram mockadas nos testes de integração, para que os testes se mantenham independentes, porém contemplando os cenários pertinentes a esta comunicação.
+Os testes de unidade foram implementados nas classes de domínio e application testando a menor unidade de código. Os testes de integração foram implementados nas classes de presentation, realizando a requisição HTTP aos endpoints em diversos cenários, testando o código por completo, da entrada dos dados, processamento e saída. O objetivo desta segregação foi considerar a eficiência dos testes versus o tempo de entrega do projeto. Aplicando este método, foi apurado pela cobertuda de testes do IntelliJ IDEA, em mais de 90% de classes testadas na maioria dos microserviços. O grande número de testes é justificado pela arquitetura do projeto, onde está sendo implementada a Clean Archtecture, com a utilização de entidades/value objects e o princípio SOLID, YAGNI e KISS. Para realizar o teste de cobertura, clique com o botão direito do mouse sobre o nome do projeto, navegue até a opção More Run/Debug, em seguida selecione a opção Run tests in <nome do projeto> with Coverage.
+As comunicações dentre microsserviços foram mockadas nos testes de integração, com a utilização do WireMock, para que os testes se mantenham independentes, porém contemplando os cenários pertinentes a esta comunicação e considerando o princípio de testes FIRST.
 

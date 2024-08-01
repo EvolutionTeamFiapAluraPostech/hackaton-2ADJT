@@ -1,0 +1,18 @@
+spring:
+  jpa:
+    show-sql: true
+  config:
+    activate:
+      on-profile: test
+  cloud:
+    discovery:
+      client:
+        simple:
+          instances:
+            hangar[0]:
+              uri: http://localhost:${wiremock.server.port:0}
+
+base:
+  url:
+    http-customer: http://localhost:7070
+    http-creditcards: http://localhost:7070

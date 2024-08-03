@@ -214,6 +214,20 @@ O objetivo deste microsserviço é realizar o registro de cartões de crédito d
             * Status 401 - Unauthorized - se o usuário não foi autenticado;
             * Status 500 - para um erro de negócio.
 
+* http://localhost:8082/api/cartao/{numero}/cliente/{cpf}
+    * Verbo PATCH - endpoint para realizar atualização do limite do cartão de crédito.
+        * Escopo: privado, requer autenticação.
+        * Contrato:
+
+            ![alt text](./img/cartaocredito_valor_pagamento_request_body.png)
+
+        * Regras de negócio:
+            * Os parâmetros número do cartão, cpf são obrigatórios e valor do pagamento da última compra.
+        * Http response status do endpoint:
+            * Status 200 - Ok - limit do cartão de crédito atualizado;
+            * Status 401 - Unauthorized - se o usuário não foi autenticado;
+            * Status 500 - para um erro de negócio.
+
     * Documentação da API: http://localhost:8082/swagger-ui/index.html
     * Banco de dados: http://localhost:5434/creditcard-db
 

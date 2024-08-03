@@ -9,6 +9,7 @@ public class Cvv {
   public static final String CVV_FIELD = "cvv";
   public static final String CVV_VALUE_CANNOT_BE_NULL_OR_EMPTY_MESSAGE = "O código de segurança do cartão de crédito não pode ser %s.";
   public static final String CVV_VALUE_LENGTH_INVALID_MESSAGE = "O código de segurança do cartão de crédito deve possuir %s caracteres. Você informou %s.";
+  public static final String CVV_VALUE_INVALID_MESSAGE = "O código de segurança do cartão de crédito é inválido. Você informou %s.";
   private final String cvvValue;
 
   public Cvv(String cvvValue) {

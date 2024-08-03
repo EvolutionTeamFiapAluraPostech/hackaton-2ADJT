@@ -9,6 +9,7 @@ public class ExpirationDate {
   public static final String EXPIRATION_DATE_FIELD = "data_validade";
   public static final String EXPIRATION_DATE_VALUE_CANNOT_BE_NULL_OR_EMPTY_MESSAGE = "A data de validade do cartão de crédito não pode ser %s.";
   public static final String EXPIRATION_DATE_VALUE_LENGTH_INVALID_MESSAGE = "A data de validade do cartão de crédito deve possuir %s caracteres. Você informou %s.";
+  public static final String EXPIRATION_DATE_VALUE_INVALID_MESSAGE = "A data de validade do cartão de crédito é inválida. Você informou %s.";
   private final String expirationDateValue;
 
   public ExpirationDate(String expirationDateValue) {

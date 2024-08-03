@@ -14,5 +14,4 @@ spring:
 
 base:
   url:
-    http-customer: http://localhost:7070
     http-creditcards: http://localhost:7070

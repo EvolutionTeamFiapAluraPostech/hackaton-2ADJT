@@ -1,5 +1,12 @@
 package br.com.fiap.payments.domain.entity;
 
+import br.com.fiap.payments.domain.valueobject.AccountValue;
+import br.com.fiap.payments.domain.valueobject.Cpf;
+import br.com.fiap.payments.domain.valueobject.CreditCardNumber;
+import br.com.fiap.payments.domain.valueobject.Cvv;
+import br.com.fiap.payments.domain.valueobject.ExpirationDate;
+import java.math.BigDecimal;
+
 public class Payment {
 
   private final String id;
@@ -12,11 +19,11 @@ public class Payment {
   public Payment(String id, String cpf, String number, String expirationDate, String cvv,
       String accountValue) {
     this.id = id;
-    this.cpf = cpf;
-    this.number = number;
-    this.expirationDate = expirationDate;
-    this.cvv = cvv;
-    this.value = accountValue;
+    this.cpf = new Cpf(cpf).getCpfValue();
+    this.number = new CreditCardNumber(number).getNumber();
+    this.expirationDate = new ExpirationDate(expirationDate).getExpirationDateValue();
+    this.cvv = new Cvv(cvv).getCvvValue();
+    this.value = new AccountValue(new BigDecimal(accountValue)).paymentValue().toString();
   }
 
   public Payment(String cpf, String number, String expirationDate, String cvv,

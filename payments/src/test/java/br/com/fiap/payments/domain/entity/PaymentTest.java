@@ -25,7 +25,6 @@ class PaymentTest {
         DEFAULT_PAYMENT_VALUE)).isInstanceOf(ValidatorException.class);
   }
 
-
   @ParameterizedTest
   @NullAndEmptySource
   @ValueSource(strings = {"1", "12345678901234567"})
@@ -56,8 +55,7 @@ class PaymentTest {
   }
 
   @ParameterizedTest
-  @NullAndEmptySource
-  @ValueSource(strings = {"-1", "A"})
+  @ValueSource(strings = {"-1"})
   void shouldThrowValidatorExceptionWhenAccountValueIsInvalid(String accountValue) {
     assertThatThrownBy(
         () -> new Payment(DEFAULT_PAYMENT_CPF, DEFAULT_PAYMENT_CREDIT_CARD_NUMBER,

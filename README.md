@@ -261,15 +261,15 @@ O objetivo deste microsserviço é realizar o registro de pagamentos de compras 
             * Status: 402 para caso o limite do cartão foi superado;
             * Status: 500 para um erro de negócio.
 
-* http://localhost:8083/api/pagamentos/cliente/{chave}
-    * Verbo GET - para realizar a pesquisa de pagamentos pelo ID do cliente. 
+* http://localhost:8083/api/pagamentos/cliente/{cpf}
+    * Verbo GET - para realizar a pesquisa de pagamentos pelo CPF do cliente. 
         * Escopo: privado, requer autenticação.
         * Retorno:
 
         ![alt text](./img/pagamentos_consulta.png)
 
         * Regras de negócio:
-            * O parâmetro ID do cliente é obrigatório.
+            * O parâmetro CPF do cliente é obrigatório.
         * Http response status do endpoint:
             * Status 200 - Ok - lista de pagamentos encontrada;
             * Status 401 - Unauthorized - se o usuário não foi autenticado;

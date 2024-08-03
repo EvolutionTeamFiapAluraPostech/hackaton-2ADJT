@@ -2,13 +2,13 @@ package br.com.fiap.creditcards.presentation.api;
 
 import br.com.fiap.creditcards.presentation.dto.CreditCardInputDto;
 import br.com.fiap.creditcards.presentation.dto.CreditCardOutputDto;
+import br.com.fiap.creditcards.presentation.dto.CreditCardPaymentValueDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @Tag(name = "CreditCardsApi", description = "API de cadastro de cartão de crédito")
 public interface CreditCardsApi {
@@ -48,5 +48,21 @@ public interface CreditCardsApi {
       @ApiResponse(responseCode = "404", description = "not found para cartão de crédito não encontrado", content = {
           @Content(schema = @Schema(hidden = true))}),
   })
-  CreditCardOutputDto getCreditCardByNumberAndCustomerCpf(@PathVariable String number, @PathVariable String cpf);
+  CreditCardOutputDto getCreditCardByNumberAndCustomerCpf(String number, String cpf);
+
+  @Operation(summary = "Atualiza o cartão de crédito",
+      description = "Endpoint para atualizar dados de um cartão de crédito",
+      tags = {"CreditCardsApi"})
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "202", description = "successful operation", content = {
+          @Content(mediaType = "application/json", schema = @Schema(implementation = CreditCardOutputDto.class))}),
+      @ApiResponse(responseCode = "400",
+          description = "bad request para validação de cpf.",
+          content = {@Content(schema = @Schema(hidden = true))}),
+      @ApiResponse(responseCode = "401", description = "unauthorized para consulta com usuário não autenticado", content = {
+          @Content(schema = @Schema(hidden = true))}),
+      @ApiResponse(responseCode = "404", description = "not found para cartão de crédito não encontrado", content = {
+          @Content(schema = @Schema(hidden = true))}),
+  })
+  void patchCreditCard(String number, String cpf, CreditCardPaymentValueDto creditCardPaymentValueDto);
 }

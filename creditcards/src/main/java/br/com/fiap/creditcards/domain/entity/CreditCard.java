@@ -18,7 +18,7 @@ public class CreditCard {
   private static final String LIMIT_VALUE_IS_INVALID_MESSAGE = "O valor do limite é invalido. Você digitou %s.";
   public static final String NULL_VALUE_MESSAGE = "null";
   public static final String EMPTY_VALUE_MESSAGE = "";
-  private String id;
+  private final String id;
   private final String cpf;
   private final String limit;
   private final String number;
@@ -78,5 +78,9 @@ public class CreditCard {
 
   public String getCvv() {
     return cvv;
+  }
+
+  public BigDecimal getNewLimit(BigDecimal paymentValue) {
+    return new BigDecimal(getLimit()).subtract(paymentValue);
   }
 }

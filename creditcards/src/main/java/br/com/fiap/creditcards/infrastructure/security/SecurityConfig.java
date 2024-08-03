@@ -1,6 +1,7 @@
 package br.com.fiap.creditcards.infrastructure.security;
 
 import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.PATCH;
 import static org.springframework.http.HttpMethod.POST;
 
 import br.com.fiap.creditcards.infrastructure.exception.CustomAccessDeniedHandler;
@@ -43,6 +44,7 @@ public class SecurityConfig {
         .authorizeHttpRequests(req -> {
           req.requestMatchers(POST, URL_CREDITCARDS).authenticated();
           req.requestMatchers(GET, URL_CREDITCARDS + "/**").authenticated();
+          req.requestMatchers(PATCH, URL_CREDITCARDS + "/**").authenticated();
           req.requestMatchers(V3_API_DOCS, SWAGGER_UI_HTML, SWAGGER_UI).permitAll();
           req.anyRequest().denyAll();
         })

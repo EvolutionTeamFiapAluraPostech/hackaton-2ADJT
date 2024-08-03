@@ -15,6 +15,7 @@ import br.com.fiap.creditcards.domain.exception.NoResultException;
 import br.com.fiap.creditcards.domain.exception.ValidatorException;
 import br.com.fiap.creditcards.infrastructure.repository.CreditCardRepository;
 import br.com.fiap.creditcards.infrastructure.schema.CreditCardSchema;
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -135,5 +136,19 @@ class CreditCardSchemaGatewayTest {
     assertThat(creditCardFound).isNotNull();
     assertThat(creditCardFound.getId()).isNotNull().isEqualTo(DEFAULT_CREDIT_CARD_ID);
     assertThat(creditCardFound).usingRecursiveComparison().isEqualTo(creditCard);
+  }
+
+  @Test
+  void shouldUpdateLimitWhenCreditCardWasFoundByNumberAndCpf() {
+    var newLimit = new BigDecimal("1500.00");
+    var creditCard = createCreditCard();
+    var creditCardSchema = createCreditCardSchemaFrom(creditCard);
+    when(creditCardRepository.findByNumberAndCpf(DEFAULT_CREDIT_CARD_NUMBER,
+        DEFAULT_CREDIT_CARD_CPF)).thenReturn(Optional.of(creditCardSchema));
+    when(creditCardRepository.save(any(CreditCardSchema.class))).thenReturn(creditCardSchema);
+
+    var creditCardSaved = creditCardSchemaGateway.updateLimit(creditCard, newLimit);
+
+    assertThat(new BigDecimal(creditCardSaved.getLimit())).isEqualTo(newLimit);
   }
 }

@@ -60,6 +60,19 @@ public class CreditCardSchemaGateway implements CreditCardGateway {
                     cpf.getCpfValue()))));
   }
 
+  @Override
+  public CreditCard updateLimit(CreditCard creditCard, BigDecimal newLimit) {
+    var creditCardSchemaOptional = creditCardRepository.findByNumberAndCpf(
+        creditCard.getNumber(), creditCard.getCpf());
+    if (creditCardSchemaOptional.isPresent()) {
+      var creditCardSchema = creditCardSchemaOptional.get();
+      creditCardSchema.setLimitValue(newLimit);
+      var creditCardSaved = creditCardRepository.save(creditCardSchema);
+      return getCreditCardFrom(creditCardSaved);
+    }
+    return null;
+  }
+
   private CreditCard getCreditCardFrom(CreditCardSchema creditCardSaved) {
     return new CreditCard(creditCardSaved.getId().toString(),
         creditCardSaved.getCpf(),

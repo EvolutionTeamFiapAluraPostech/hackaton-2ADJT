@@ -1,6 +1,7 @@
 package br.com.fiap.creditcards.application.gateway;
 
 import br.com.fiap.creditcards.domain.entity.CreditCard;
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface CreditCardGateway {
@@ -13,4 +14,6 @@ public interface CreditCardGateway {
 
   CreditCard findByNumberAndCpfRequired
       (String creditCardNumber, String cpf);
+
+  CreditCard updateLimit(CreditCard creditCard, BigDecimal newLimit);
 }

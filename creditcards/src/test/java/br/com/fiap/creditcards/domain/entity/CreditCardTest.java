@@ -10,6 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import br.com.fiap.creditcards.domain.exception.ValidatorException;
+import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
@@ -77,5 +78,17 @@ class CreditCardTest {
     assertThat(creditCard.getExpirationDate()).isNotNull().isNotEmpty()
         .isEqualTo(DEFAULT_CREDIT_CARD_EXPIRATION_DATE);
     assertThat(creditCard.getCvv()).isNotNull().isNotEmpty().isEqualTo(DEFAULT_CREDIT_CARD_CVV);
+  }
+
+  @Test
+  void shouldCalculateNewLimit() {
+    var creditCard = new CreditCard(DEFAULT_CREDIT_CARD_ID, DEFAULT_CREDIT_CARD_CPF,
+        DEFAULT_CREDIT_CARD_LIMIT, DEFAULT_CREDIT_CARD_NUMBER,
+        DEFAULT_CREDIT_CARD_EXPIRATION_DATE, DEFAULT_CREDIT_CARD_CVV);
+
+    var newLimit = creditCard.getNewLimit(new BigDecimal("350.00"));
+
+    assertThat(creditCard).isNotNull();
+    assertThat(newLimit).isEqualTo(new BigDecimal("650.00"));
   }
 }

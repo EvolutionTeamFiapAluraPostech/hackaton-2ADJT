@@ -1,5 +1,6 @@
 package br.com.fiap.payments.presentation.exception;
 
+import br.com.fiap.payments.domain.exception.LimitInvalidException;
 import br.com.fiap.payments.domain.exception.NoResultException;
 import br.com.fiap.payments.domain.exception.ValidatorException;
 import br.com.fiap.payments.presentation.dto.ErrorDto;
@@ -21,6 +22,12 @@ public class ApiExceptionHandler {
   public ResponseEntity<?> handlerNoResultException(NoResultException exception) {
     var error = exception.getFieldError();
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorDto(error));
+  }
+
+  @ExceptionHandler(LimitInvalidException.class)
+  public ResponseEntity<?> handlerLimitInvalidException(LimitInvalidException exception) {
+    var error = exception.getFieldError();
+    return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(new ErrorDto(error));
   }
 
   @ExceptionHandler(Exception.class)

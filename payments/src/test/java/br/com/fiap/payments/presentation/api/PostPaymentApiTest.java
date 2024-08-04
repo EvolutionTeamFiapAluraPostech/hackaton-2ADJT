@@ -11,32 +11,38 @@ import static br.com.fiap.payments.shared.testdata.PaymentsTestData.DEFAULT_PAYM
 import static br.com.fiap.payments.shared.testdata.PaymentsTestData.DEFAULT_PAYMENT_CREDIT_CARD_NUMBER;
 import static br.com.fiap.payments.shared.testdata.PaymentsTestData.DEFAULT_PAYMENT_VALUE;
 import static br.com.fiap.payments.shared.util.IsUUID.isUUID;
-import static org.assertj.core.api.Assertions.*;
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import br.com.fiap.payments.infrastructure.httpclient.creditcard.dto.CreditCardDto;
 import br.com.fiap.payments.infrastructure.schema.PaymentSchema;
 import br.com.fiap.payments.presentation.dto.PaymentInputDto;
 import br.com.fiap.payments.shared.annotation.DatabaseTest;
 import br.com.fiap.payments.shared.annotation.IntegrationTest;
 import br.com.fiap.payments.shared.api.JsonUtil;
 import br.com.fiap.payments.shared.util.StringUtil;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import com.jayway.jsonpath.JsonPath;
 import jakarta.persistence.EntityManager;
 import java.util.UUID;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @IntegrationTest
 @DatabaseTest
+@WireMockTest(httpPort = 7070)
 class PostPaymentApiTest {
 
   private static final String URL_PAYMENTS = "/api/pagamentos";
@@ -154,6 +160,10 @@ class PostPaymentApiTest {
         DEFAULT_PAYMENT_CREDIT_CARD_EXPIRATION_DATE, DEFAULT_PAYMENT_CREDIT_CARD_CVV,
         DEFAULT_PAYMENT_VALUE);
     var paymentJson = JsonUtil.toJson(paymentInputDto);
+    stubFor(
+        WireMock.get("/api/cartao/%s/cliente/%s".formatted(ALTERNATIVE_PAYMENT_CREDIT_CARD_NUMBER,
+                ALTERNATIVE_PAYMENT_CPF))
+            .willReturn(aResponse().withStatus(HttpStatus.INTERNAL_SERVER_ERROR.value())));
 
     var request = post(URL_PAYMENTS)
         .contentType(APPLICATION_JSON)
@@ -169,6 +179,16 @@ class PostPaymentApiTest {
         ALTERNATIVE_PAYMENT_CREDIT_CARD_EXPIRATION_DATE, DEFAULT_PAYMENT_CREDIT_CARD_CVV,
         DEFAULT_PAYMENT_VALUE);
     var paymentJson = JsonUtil.toJson(paymentInputDto);
+    var creditCard = new CreditCardDto(UUID.randomUUID().toString(), DEFAULT_PAYMENT_CPF,
+        DEFAULT_PAYMENT_VALUE, DEFAULT_PAYMENT_CREDIT_CARD_NUMBER,
+        DEFAULT_PAYMENT_CREDIT_CARD_EXPIRATION_DATE, DEFAULT_PAYMENT_CREDIT_CARD_CVV);
+    var creditCardJson = JsonUtil.toJson(creditCard);
+    stubFor(WireMock.get("/api/cartao/%s/cliente/%s".formatted(DEFAULT_PAYMENT_CREDIT_CARD_NUMBER,
+            DEFAULT_PAYMENT_CPF))
+        .willReturn(aResponse()
+            .withStatus(HttpStatus.OK.value())
+            .withHeader("Content-Type", "application/json")
+            .withBody(creditCardJson)));
 
     var request = post(URL_PAYMENTS)
         .contentType(APPLICATION_JSON)
@@ -184,6 +204,16 @@ class PostPaymentApiTest {
         DEFAULT_PAYMENT_CREDIT_CARD_EXPIRATION_DATE, ALTERNATIVE_PAYMENT_CREDIT_CARD_CVV,
         DEFAULT_PAYMENT_VALUE);
     var paymentJson = JsonUtil.toJson(paymentInputDto);
+    var creditCard = new CreditCardDto(UUID.randomUUID().toString(), DEFAULT_PAYMENT_CPF,
+        DEFAULT_PAYMENT_VALUE, DEFAULT_PAYMENT_CREDIT_CARD_NUMBER,
+        DEFAULT_PAYMENT_CREDIT_CARD_EXPIRATION_DATE, DEFAULT_PAYMENT_CREDIT_CARD_CVV);
+    var creditCardJson = JsonUtil.toJson(creditCard);
+    stubFor(WireMock.get("/api/cartao/%s/cliente/%s".formatted(DEFAULT_PAYMENT_CREDIT_CARD_NUMBER,
+            DEFAULT_PAYMENT_CPF))
+        .willReturn(aResponse()
+            .withStatus(HttpStatus.OK.value())
+            .withHeader("Content-Type", "application/json")
+            .withBody(creditCardJson)));
 
     var request = post(URL_PAYMENTS)
         .contentType(APPLICATION_JSON)
@@ -199,6 +229,16 @@ class PostPaymentApiTest {
         DEFAULT_PAYMENT_CREDIT_CARD_EXPIRATION_DATE, DEFAULT_PAYMENT_CREDIT_CARD_CVV,
         ALTERNATIVE_PAYMENT_VALUE);
     var paymentJson = JsonUtil.toJson(paymentInputDto);
+    var creditCard = new CreditCardDto(UUID.randomUUID().toString(), DEFAULT_PAYMENT_CPF,
+        DEFAULT_PAYMENT_VALUE, DEFAULT_PAYMENT_CREDIT_CARD_NUMBER,
+        DEFAULT_PAYMENT_CREDIT_CARD_EXPIRATION_DATE, DEFAULT_PAYMENT_CREDIT_CARD_CVV);
+    var creditCardJson = JsonUtil.toJson(creditCard);
+    stubFor(WireMock.get("/api/cartao/%s/cliente/%s".formatted(DEFAULT_PAYMENT_CREDIT_CARD_NUMBER,
+            DEFAULT_PAYMENT_CPF))
+        .willReturn(aResponse()
+            .withStatus(HttpStatus.OK.value())
+            .withHeader("Content-Type", "application/json")
+            .withBody(creditCardJson)));
 
     var request = post(URL_PAYMENTS)
         .contentType(APPLICATION_JSON)
@@ -211,16 +251,29 @@ class PostPaymentApiTest {
   void shouldReturnOkWhenAllPaymentsAttributesAreCorrect() throws Exception {
     var paymentInputDto = new PaymentInputDto(DEFAULT_PAYMENT_CPF,
         DEFAULT_PAYMENT_CREDIT_CARD_NUMBER,
-        ALTERNATIVE_PAYMENT_CREDIT_CARD_EXPIRATION_DATE, DEFAULT_PAYMENT_CREDIT_CARD_CVV,
+        DEFAULT_PAYMENT_CREDIT_CARD_EXPIRATION_DATE, DEFAULT_PAYMENT_CREDIT_CARD_CVV,
         DEFAULT_PAYMENT_VALUE);
     var paymentJson = JsonUtil.toJson(paymentInputDto);
+    var creditCard = new CreditCardDto(UUID.randomUUID().toString(), DEFAULT_PAYMENT_CPF,
+        DEFAULT_PAYMENT_VALUE, DEFAULT_PAYMENT_CREDIT_CARD_NUMBER,
+        DEFAULT_PAYMENT_CREDIT_CARD_EXPIRATION_DATE, DEFAULT_PAYMENT_CREDIT_CARD_CVV);
+    var creditCardJson = JsonUtil.toJson(creditCard);
+    stubFor(WireMock.get("/api/cartao/%s/cliente/%s".formatted(DEFAULT_PAYMENT_CREDIT_CARD_NUMBER,
+            DEFAULT_PAYMENT_CPF))
+        .willReturn(aResponse()
+            .withStatus(HttpStatus.OK.value())
+            .withHeader("Content-Type", "application/json")
+            .withBody(creditCardJson)));
+    stubFor(WireMock.patch("/api/cartao/%s/cliente/%s".formatted(DEFAULT_PAYMENT_CREDIT_CARD_NUMBER,
+            DEFAULT_PAYMENT_CPF))
+        .willReturn(aResponse().withStatus(HttpStatus.OK.value())));
 
     var request = post(URL_PAYMENTS)
         .contentType(APPLICATION_JSON)
         .content(paymentJson);
     var result = mockMvc.perform(request)
-        .andExpect(status().isPaymentRequired())
-        .andExpect(MockMvcResultMatchers.content().contentType(APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(APPLICATION_JSON))
         .andExpect(jsonPath("$.chave_pagamento", isUUID()))
         .andReturn();
 
@@ -228,6 +281,5 @@ class PostPaymentApiTest {
     var id = JsonPath.parse(contentAsString).read("$.chave_pagamento").toString();
     var paymentFound = entityManager.find(PaymentSchema.class, UUID.fromString(id));
     assertThat(paymentFound).isNotNull();
-    Assertions.fail("shouldReturnOkWhenAllPaymentsAttributesAreCorrect");
   }
 }

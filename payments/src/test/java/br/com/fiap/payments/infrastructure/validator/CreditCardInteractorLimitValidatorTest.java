@@ -3,7 +3,7 @@ package br.com.fiap.payments.infrastructure.validator;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import br.com.fiap.payments.domain.exception.ValidatorException;
+import br.com.fiap.payments.domain.exception.LimitInvalidException;
 import br.com.fiap.payments.domain.valueobject.AccountValue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +22,7 @@ class CreditCardInteractorLimitValidatorTest {
     var paymentValue = "2000";
     assertThatThrownBy(
         () -> creditCardInteractorLimitValidator.validate(creditCardLimit, paymentValue))
-        .isInstanceOf(ValidatorException.class)
+        .isInstanceOf(LimitInvalidException.class)
         .hasMessage(AccountValue.PAYMENT_VALUE_CANNOT_BE_GREATER_THAN_LIMIT_VALUE_MESSAGE.formatted(
             creditCardLimit, paymentValue));
   }

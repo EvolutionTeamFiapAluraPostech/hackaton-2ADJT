@@ -9,9 +9,11 @@ import static br.com.fiap.payments.shared.testdata.PaymentsTestData.DEFAULT_PAYM
 import static br.com.fiap.payments.shared.testdata.PaymentsTestData.DEFAULT_PAYMENT_CREDIT_CARD_NUMBER;
 import static br.com.fiap.payments.shared.testdata.PaymentsTestData.DEFAULT_PAYMENT_VALUE;
 import static br.com.fiap.payments.shared.testdata.PaymentsTestData.createNewPaymentInputDto;
+import static br.com.fiap.payments.shared.testdata.PaymentsTestData.createPayment;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -23,17 +25,17 @@ import br.com.fiap.payments.domain.exception.NoResultException;
 import br.com.fiap.payments.domain.exception.ValidatorException;
 import br.com.fiap.payments.infrastructure.httpclient.creditcard.CreditCardHttpClient;
 import br.com.fiap.payments.infrastructure.httpclient.creditcard.dto.CreditCardDto;
+import br.com.fiap.payments.infrastructure.httpclient.creditcard.dto.CreditCardPaymentValueDto;
 import br.com.fiap.payments.infrastructure.validator.CreditCardInteractorCvvValidator;
 import br.com.fiap.payments.infrastructure.validator.CreditCardInteractorExpirationDateValidator;
 import br.com.fiap.payments.infrastructure.validator.CreditCardInteractorLimitValidator;
 import br.com.fiap.payments.presentation.dto.PaymentInputDto;
-import br.com.fiap.payments.shared.testdata.PaymentsTestData;
+import java.math.BigDecimal;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 
@@ -130,15 +132,20 @@ class CreatePaymentInteractorTest {
     var paymentInputDto = new PaymentInputDto(DEFAULT_PAYMENT_CPF,
         DEFAULT_PAYMENT_CREDIT_CARD_NUMBER,
         ALTERNATIVE_PAYMENT_CREDIT_CARD_EXPIRATION_DATE, ALTERNATIVE_PAYMENT_CREDIT_CARD_CVV,
-        ALTERNATIVE_PAYMENT_VALUE);
+        DEFAULT_PAYMENT_VALUE);
     var creditCard = new CreditCardDto(UUID.randomUUID().toString(), DEFAULT_PAYMENT_CPF,
         DEFAULT_PAYMENT_VALUE, DEFAULT_PAYMENT_CREDIT_CARD_NUMBER,
         DEFAULT_PAYMENT_CREDIT_CARD_EXPIRATION_DATE, DEFAULT_PAYMENT_CREDIT_CARD_CVV);
     var creditCardDtoResponseEntity = ResponseEntity.ok(creditCard);
     when(creditCardHttpClient.getCreditCardByNumberAndCpf(paymentInputDto.numero(),
         paymentInputDto.cpf())).thenReturn(creditCardDtoResponseEntity);
-    var paymentWithId = PaymentsTestData.createPayment();
-    when(paymentGateway.save(Mockito.any(Payment.class))).thenReturn(paymentWithId);
+    var paymentWithId = createPayment();
+    when(paymentGateway.save(any(Payment.class))).thenReturn(paymentWithId);
+    var creditCardPaymentValue = new CreditCardPaymentValueDto(
+        new BigDecimal(paymentInputDto.valor()));
+    doNothing().when(creditCardHttpClient)
+        .patchCreditCardLimit(paymentInputDto.numero(), paymentInputDto.cpf(),
+            creditCardPaymentValue);
 
     var paymentSaved = createPaymentInteractor.execute(paymentInputDto);
 

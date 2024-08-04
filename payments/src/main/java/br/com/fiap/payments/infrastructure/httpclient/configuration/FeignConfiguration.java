@@ -1,12 +1,18 @@
 package br.com.fiap.payments.infrastructure.httpclient.configuration;
 
 import feign.RequestInterceptor;
+import feign.okhttp.OkHttpClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 @Configuration
 public class FeignConfiguration {
+
+  @Bean
+  public OkHttpClient client() {
+    return new OkHttpClient();
+  }
 
   @Bean
   public RequestInterceptor requestInterceptor() {

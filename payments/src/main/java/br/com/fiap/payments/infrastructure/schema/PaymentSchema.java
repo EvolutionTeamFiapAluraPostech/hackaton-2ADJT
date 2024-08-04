@@ -2,6 +2,7 @@ package br.com.fiap.payments.infrastructure.schema;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,5 +22,5 @@ public class PaymentSchema extends BaseSchema {
   private String number;
   private String expirationDate;
   private String cvv;
-  private String value;
+  private BigDecimal value;
 }

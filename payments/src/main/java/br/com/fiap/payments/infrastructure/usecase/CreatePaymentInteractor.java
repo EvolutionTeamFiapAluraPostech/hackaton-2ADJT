@@ -6,9 +6,11 @@ import br.com.fiap.payments.application.validator.CreditCardExpirationDateValida
 import br.com.fiap.payments.domain.entity.Payment;
 import br.com.fiap.payments.infrastructure.httpclient.creditcard.CreditCardHttpClient;
 import br.com.fiap.payments.infrastructure.httpclient.creditcard.dto.CreditCardDto;
+import br.com.fiap.payments.infrastructure.httpclient.creditcard.dto.CreditCardPaymentValueDto;
 import br.com.fiap.payments.infrastructure.validator.CreditCardInteractorCvvValidator;
 import br.com.fiap.payments.infrastructure.validator.CreditCardInteractorLimitValidator;
 import br.com.fiap.payments.presentation.dto.PaymentInputDto;
+import java.math.BigDecimal;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -44,9 +46,16 @@ public class CreatePaymentInteractor implements CreatePaymentUseCase {
         payment.getNumber(), payment.getCpf());
     if (creditCardDtoResponseEntity.getStatusCode().equals(HttpStatus.OK)) {
       validateCreditCardAttributes(creditCardDtoResponseEntity, payment);
-      return paymentGateway.save(payment);
+      var paymentSaved = paymentGateway.save(payment);
+      updateCreditCardLimitInCreditCardMicroservice(paymentSaved);
+      return paymentSaved;
     }
     return null;
+  }
+
+  private void updateCreditCardLimitInCreditCardMicroservice(Payment paymentSaved) {
+    var creditCardPaymentValueDto = new CreditCardPaymentValueDto(new BigDecimal(paymentSaved.getValue()));
+    creditCardHttpClient.patchCreditCardLimit(paymentSaved.getNumber(), paymentSaved.getCpf(), creditCardPaymentValueDto);
   }
 
   private void validateCreditCardAttributes(

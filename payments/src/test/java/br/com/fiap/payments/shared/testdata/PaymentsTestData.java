@@ -3,6 +3,7 @@ package br.com.fiap.payments.shared.testdata;
 import br.com.fiap.payments.domain.entity.Payment;
 import br.com.fiap.payments.infrastructure.schema.PaymentSchema;
 import br.com.fiap.payments.presentation.dto.PaymentInputDto;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public final class PaymentsTestData {
@@ -42,7 +43,7 @@ public final class PaymentsTestData {
         .number(DEFAULT_PAYMENT_CREDIT_CARD_NUMBER)
         .expirationDate(DEFAULT_PAYMENT_CREDIT_CARD_EXPIRATION_DATE)
         .cvv(DEFAULT_PAYMENT_CREDIT_CARD_CVV)
-        .value(DEFAULT_PAYMENT_VALUE)
+        .value(new BigDecimal(DEFAULT_PAYMENT_VALUE))
         .build();
   }
 

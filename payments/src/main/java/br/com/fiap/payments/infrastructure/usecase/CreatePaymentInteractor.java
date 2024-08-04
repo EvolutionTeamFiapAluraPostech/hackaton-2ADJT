@@ -41,7 +41,8 @@ public class CreatePaymentInteractor implements CreatePaymentUseCase {
   @Override
   public Payment execute(PaymentInputDto paymentInputDto) {
     var payment = new Payment(paymentInputDto.cpf(), paymentInputDto.numero(),
-        paymentInputDto.data_validade(), paymentInputDto.cvv(), paymentInputDto.valor());
+        paymentInputDto.data_validade(), paymentInputDto.cvv(), paymentInputDto.valor(),
+        "aprovado");
     var creditCardDtoResponseEntity = creditCardHttpClient.getCreditCardByNumberAndCpf(
         payment.getNumber(), payment.getCpf());
     if (creditCardDtoResponseEntity.getStatusCode().equals(HttpStatus.OK)) {
@@ -54,8 +55,10 @@ public class CreatePaymentInteractor implements CreatePaymentUseCase {
   }
 
   private void updateCreditCardLimitInCreditCardMicroservice(Payment paymentSaved) {
-    var creditCardPaymentValueDto = new CreditCardPaymentValueDto(new BigDecimal(paymentSaved.getValue()));
-    creditCardHttpClient.patchCreditCardLimit(paymentSaved.getNumber(), paymentSaved.getCpf(), creditCardPaymentValueDto);
+    var creditCardPaymentValueDto = new CreditCardPaymentValueDto(
+        new BigDecimal(paymentSaved.getValue()));
+    creditCardHttpClient.patchCreditCardLimit(paymentSaved.getNumber(), paymentSaved.getCpf(),
+        creditCardPaymentValueDto);
   }
 
   private void validateCreditCardAttributes(

@@ -4,6 +4,7 @@ import static br.com.fiap.payments.shared.testdata.PaymentsTestData.DEFAULT_PAYM
 import static br.com.fiap.payments.shared.testdata.PaymentsTestData.DEFAULT_PAYMENT_CREDIT_CARD_CVV;
 import static br.com.fiap.payments.shared.testdata.PaymentsTestData.DEFAULT_PAYMENT_CREDIT_CARD_EXPIRATION_DATE;
 import static br.com.fiap.payments.shared.testdata.PaymentsTestData.DEFAULT_PAYMENT_CREDIT_CARD_NUMBER;
+import static br.com.fiap.payments.shared.testdata.PaymentsTestData.DEFAULT_PAYMENT_STATUS_APROVADO;
 import static br.com.fiap.payments.shared.testdata.PaymentsTestData.DEFAULT_PAYMENT_VALUE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -22,7 +23,8 @@ class PaymentTest {
   void shouldThrowValidatorExceptionWhenCpfIsInvalid(String cpf) {
     assertThatThrownBy(() -> new Payment(cpf, DEFAULT_PAYMENT_CREDIT_CARD_NUMBER,
         DEFAULT_PAYMENT_CREDIT_CARD_EXPIRATION_DATE, DEFAULT_PAYMENT_CREDIT_CARD_CVV,
-        DEFAULT_PAYMENT_VALUE)).isInstanceOf(ValidatorException.class);
+        DEFAULT_PAYMENT_VALUE, DEFAULT_PAYMENT_STATUS_APROVADO)).isInstanceOf(
+        ValidatorException.class);
   }
 
   @ParameterizedTest
@@ -31,7 +33,8 @@ class PaymentTest {
   void shouldThrowValidatorExceptionWhenPaymentNumberIsInvalid(String number) {
     assertThatThrownBy(() -> new Payment(DEFAULT_PAYMENT_CPF, number,
         DEFAULT_PAYMENT_CREDIT_CARD_EXPIRATION_DATE, DEFAULT_PAYMENT_CREDIT_CARD_CVV,
-        DEFAULT_PAYMENT_VALUE)).isInstanceOf(ValidatorException.class);
+        DEFAULT_PAYMENT_VALUE, DEFAULT_PAYMENT_STATUS_APROVADO)).isInstanceOf(
+        ValidatorException.class);
   }
 
   @ParameterizedTest
@@ -40,7 +43,8 @@ class PaymentTest {
   void shouldThrowValidatorExceptionWhenExpirationDateIsInvalid(String expirationDate) {
     assertThatThrownBy(
         () -> new Payment(DEFAULT_PAYMENT_CPF, DEFAULT_PAYMENT_CREDIT_CARD_NUMBER, expirationDate,
-            DEFAULT_PAYMENT_CREDIT_CARD_CVV, DEFAULT_PAYMENT_VALUE))
+            DEFAULT_PAYMENT_CREDIT_CARD_CVV, DEFAULT_PAYMENT_VALUE,
+            DEFAULT_PAYMENT_STATUS_APROVADO))
         .isInstanceOf(ValidatorException.class);
   }
 
@@ -50,7 +54,8 @@ class PaymentTest {
   void shouldThrowValidatorExceptionWhenCvvIsInvalid(String cvv) {
     assertThatThrownBy(
         () -> new Payment(DEFAULT_PAYMENT_CPF, DEFAULT_PAYMENT_CREDIT_CARD_NUMBER,
-            DEFAULT_PAYMENT_CREDIT_CARD_EXPIRATION_DATE, cvv, DEFAULT_PAYMENT_VALUE))
+            DEFAULT_PAYMENT_CREDIT_CARD_EXPIRATION_DATE, cvv, DEFAULT_PAYMENT_VALUE,
+            DEFAULT_PAYMENT_STATUS_APROVADO))
         .isInstanceOf(ValidatorException.class);
   }
 
@@ -60,7 +65,7 @@ class PaymentTest {
     assertThatThrownBy(
         () -> new Payment(DEFAULT_PAYMENT_CPF, DEFAULT_PAYMENT_CREDIT_CARD_NUMBER,
             DEFAULT_PAYMENT_CREDIT_CARD_EXPIRATION_DATE, DEFAULT_PAYMENT_CREDIT_CARD_CVV,
-            accountValue))
+            accountValue, DEFAULT_PAYMENT_STATUS_APROVADO))
         .isInstanceOf(ValidatorException.class);
   }
 
@@ -68,7 +73,7 @@ class PaymentTest {
   void shouldCreatePaymentWhenAllAttributesAreCorrect() {
     var creditCard = new Payment(DEFAULT_PAYMENT_CPF, DEFAULT_PAYMENT_CREDIT_CARD_NUMBER,
         DEFAULT_PAYMENT_CREDIT_CARD_EXPIRATION_DATE, DEFAULT_PAYMENT_CREDIT_CARD_CVV,
-        DEFAULT_PAYMENT_VALUE);
+        DEFAULT_PAYMENT_VALUE, DEFAULT_PAYMENT_STATUS_APROVADO);
 
     assertThat(creditCard).isNotNull();
     assertThat(creditCard.getCpf()).isNotNull().isNotEmpty().isEqualTo(DEFAULT_PAYMENT_CPF);
@@ -76,7 +81,8 @@ class PaymentTest {
         .isEqualTo(DEFAULT_PAYMENT_CREDIT_CARD_NUMBER);
     assertThat(creditCard.getExpirationDate()).isNotNull().isNotEmpty()
         .isEqualTo(DEFAULT_PAYMENT_CREDIT_CARD_EXPIRATION_DATE);
-    assertThat(creditCard.getCvv()).isNotNull().isNotEmpty().isEqualTo(DEFAULT_PAYMENT_CREDIT_CARD_CVV);
+    assertThat(creditCard.getCvv()).isNotNull().isNotEmpty()
+        .isEqualTo(DEFAULT_PAYMENT_CREDIT_CARD_CVV);
     assertThat(creditCard.getValue()).isNotNull().isNotEmpty().isEqualTo(DEFAULT_PAYMENT_VALUE);
   }
 }

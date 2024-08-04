@@ -23,4 +23,5 @@ public class PaymentSchema extends BaseSchema {
   private String expirationDate;
   private String cvv;
   private BigDecimal value;
+  private String status;
 }

@@ -15,20 +15,22 @@ public class Payment {
   private final String expirationDate;
   private final String cvv;
   private final String value;
+  private final String status;
 
   public Payment(String id, String cpf, String number, String expirationDate, String cvv,
-      String accountValue) {
+      String accountValue, String status) {
     this.id = id;
     this.cpf = new Cpf(cpf).getCpfValue();
     this.number = new CreditCardNumber(number).getNumber();
     this.expirationDate = new ExpirationDate(expirationDate).getExpirationDateValue();
     this.cvv = new Cvv(cvv).getCvvValue();
     this.value = new AccountValue(new BigDecimal(accountValue)).paymentValue().toString();
+    this.status = status;
   }
 
   public Payment(String cpf, String number, String expirationDate, String cvv,
-      String accountValue) {
-    this(null, cpf, number, expirationDate, cvv, accountValue);
+      String accountValue, String status) {
+    this(null, cpf, number, expirationDate, cvv, accountValue, status);
   }
 
   public String getId() {
@@ -53,5 +55,9 @@ public class Payment {
 
   public String getValue() {
     return value;
+  }
+
+  public String getStatus() {
+    return status;
   }
 }

@@ -30,12 +30,14 @@ public class PaymentSchemaGateway implements PaymentGateway {
         .expirationDate(payment.getExpirationDate())
         .cvv(payment.getCvv())
         .value(new BigDecimal(payment.getValue()))
+        .status(payment.getStatus())
         .build();
   }
 
   private Payment getPaymentFrom(PaymentSchema paymentSchemaSaved) {
     return new Payment(paymentSchemaSaved.getId().toString(), paymentSchemaSaved.getCpf(),
         paymentSchemaSaved.getNumber(), paymentSchemaSaved.getExpirationDate(),
-        paymentSchemaSaved.getCvv(), paymentSchemaSaved.getValue().toString());
+        paymentSchemaSaved.getCvv(), paymentSchemaSaved.getValue().toString(),
+        paymentSchemaSaved.getStatus());
   }
 }

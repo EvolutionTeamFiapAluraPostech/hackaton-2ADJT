@@ -20,6 +20,7 @@ public final class PaymentsTestData {
   public static final String ALTERNATIVE_PAYMENT_CREDIT_CARD_EXPIRATION_DATE = "06/23";
   public static final String ALTERNATIVE_PAYMENT_CREDIT_CARD_CVV = "321";
   public static final String ALTERNATIVE_PAYMENT_VALUE = "2000.00";
+  public static final String DEFAULT_PAYMENT_STATUS_APROVADO = "aprovado";
 
   private PaymentsTestData() {
   }
@@ -27,13 +28,13 @@ public final class PaymentsTestData {
   public static Payment createNewPayment() {
     return new Payment(DEFAULT_PAYMENT_CPF, DEFAULT_PAYMENT_CREDIT_CARD_NUMBER,
         DEFAULT_PAYMENT_CREDIT_CARD_EXPIRATION_DATE, DEFAULT_PAYMENT_CREDIT_CARD_CVV,
-        DEFAULT_PAYMENT_VALUE);
+        DEFAULT_PAYMENT_VALUE, DEFAULT_PAYMENT_STATUS_APROVADO);
   }
 
   public static Payment createPayment() {
     return new Payment(DEFAULT_PAYMENT_ID, DEFAULT_PAYMENT_CPF, DEFAULT_PAYMENT_CREDIT_CARD_NUMBER,
         DEFAULT_PAYMENT_CREDIT_CARD_EXPIRATION_DATE, DEFAULT_PAYMENT_CREDIT_CARD_CVV,
-        DEFAULT_PAYMENT_VALUE);
+        DEFAULT_PAYMENT_VALUE, DEFAULT_PAYMENT_STATUS_APROVADO);
   }
 
   public static PaymentSchema createPaymentSchema(Payment payment) {
@@ -44,6 +45,7 @@ public final class PaymentsTestData {
         .expirationDate(DEFAULT_PAYMENT_CREDIT_CARD_EXPIRATION_DATE)
         .cvv(DEFAULT_PAYMENT_CREDIT_CARD_CVV)
         .value(new BigDecimal(DEFAULT_PAYMENT_VALUE))
+        .status(DEFAULT_PAYMENT_STATUS_APROVADO)
         .build();
   }
 

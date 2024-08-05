@@ -1,0 +1,164 @@
+version: '3.8'
+
+services:
+  user-db-service:
+    container_name: postgresql-users
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: users-db
+      POSTGRES_USER: users-postgres-user
+      POSTGRES_PASSWORD: users-postgres-pwd
+    ports:
+      - 5432:5432
+    volumes:
+      - /var/lib/postgres
+    networks:
+      - hackaton-postgres-network
+    deploy:
+        resources:
+            limits:
+              cpus: '0.5'
+              memory: 512M
+
+  user-api:
+    container_name: user-api
+    build:
+      context: ./authentication
+    depends_on:
+      - user-db-service
+    ports:
+      - "8080:8080"
+    environment:
+      spring.datasource.url: jdbc:postgresql://user-db-service/users-db
+      spring.datasource.username: users-postgres-user
+      spring.datasource.password: users-postgres-pwd
+    networks:
+      - hackaton-postgres-network
+    deploy:
+        resources:
+            limits:
+              cpus: '0.5'
+              memory: 512M
+
+  customers-db-service:
+    container_name: postgresql-customers
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: customers-db
+      POSTGRES_USER: customer-postgres-user
+      POSTGRES_PASSWORD: customer-postgres-pwd
+    ports:
+      - 5433:5432
+    volumes:
+      - /var/lib/postgres
+    networks:
+      - hackaton-postgres-network
+    deploy:
+        resources:
+            limits:
+              cpus: '0.5'
+              memory: 512M
+
+  customers-api:
+    container_name: customers-api
+    build:
+      context: ./customers
+    depends_on:
+      - customers-db-service
+    ports:
+      - "8081:8081"
+    environment:
+      spring.datasource.url: jdbc:postgresql://customers-db-service/customers-db
+      spring.datasource.username: customer-postgres-user
+      spring.datasource.password: customer-postgres-pwd
+    networks:
+      - hackaton-postgres-network
+    deploy:
+        resources:
+            limits:
+              cpus: '0.5'
+              memory: 512M
+
+  creditcard-db-service:
+    container_name: postgresql-creditcard
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: creditcard-db
+      POSTGRES_USER: creditcard-postgres-user
+      POSTGRES_PASSWORD: creditcard-postgres-pwd
+    ports:
+      - 5434:5432
+    volumes:
+      - /var/lib/postgres
+    networks:
+      - hackaton-postgres-network
+    deploy:
+        resources:
+            limits:
+              cpus: '0.5'
+              memory: 512M
+
+  creditcard-api:
+    container_name: creditcard-api
+    build:
+      context: ./creditcards
+    depends_on:
+      - creditcard-db-service
+    ports:
+      - "8082:8082"
+    environment:
+      spring.datasource.url: jdbc:postgresql://creditcard-db-service/creditcard-db
+      spring.datasource.username: creditcard-postgres-user
+      spring.datasource.password: creditcard-postgres-pwd
+      URL_CUSTOMER: http://customers-api:8081
+    networks:
+      - hackaton-postgres-network
+    deploy:
+        resources:
+            limits:
+              cpus: '0.5'
+              memory: 512M
+
+  payments-db-service:
+    container_name: postgresql-payments
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: payments-db
+      POSTGRES_USER: payments-postgres-user
+      POSTGRES_PASSWORD: payments-postgres-pwd
+    ports:
+      - 5435:5432
+    volumes:
+      - /var/lib/postgres
+    networks:
+      - hackaton-postgres-network
+    deploy:
+        resources:
+            limits:
+              cpus: '0.5'
+              memory: 512M
+
+  payments-api:
+    container_name: payments-api
+    build:
+      context: ./payments
+    depends_on:
+      - payments-db-service
+    ports:
+      - "8083:8083"
+    environment:
+      spring.datasource.url: jdbc:postgresql://payments-db-service/payments-db
+      spring.datasource.username: payments-postgres-user
+      spring.datasource.password: payments-postgres-pwd
+      URL_CREDITCARDS: http://creditcard-api:8082
+    networks:
+      - hackaton-postgres-network
+    deploy:
+        resources:
+            limits:
+              cpus: '0.5'
+              memory: 512M
+
+networks:
+  hackaton-postgres-network:
+    driver: bridge

@@ -170,7 +170,7 @@ Foi utilizado no projeto o flyway para criar a tabela de banco de dados e realiz
 
 # Microsserviço de clientes - Resultado dos testes
 
-169 testes de integração e unidade, executados em 2 segudos, com 100% de classes e 91% de linhas de código cobertas.
+169 testes de integração e unidade, executados em 2 segudos, com 100% de classes e 92% de linhas de código cobertas.
 
 ![alt text](./img/cliente_cobertura_testes.png)
 
@@ -242,7 +242,7 @@ Foi utilizado no projeto o flyway para criar a tabela de banco de dados e realiz
 
 # Microsserviço de cartões de crédito - Resultado dos testes
 
-160 testes de integração e unidade, executados em 2 segudos, com 100% de classes e 92% de linhas de código cobertas.
+169 testes de integração e unidade, executados em 2 segudos, com 100% de classes e 92% de linhas de código cobertas.
 
 O microsserviço de cartões de crédito realiza uma comunicação com o microsserviço de clientes, para verificar se o CPF existe. Esta comunicação poderia influenciar nos testes de integração, pois este realiza um teste iniciando do endpoint, passando pelas camadas internas da aplicação, realiza uma operação no banco de dados e por fim faz todo o caminho de volta, retornando o resultado do consumo do endpoint. Para que o teste seja independente do microsserviço de clientes, foi utilizado o WireMock no teste de integração para simular o microsserviço de clientes, sem que este esteja ativo.
 

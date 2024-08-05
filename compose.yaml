@@ -17,7 +17,7 @@ services:
     deploy:
         resources:
             limits:
-              cpus: '0.5'
+              cpus: '1'
               memory: 512M
 
   user-api:
@@ -37,7 +37,7 @@ services:
     deploy:
         resources:
             limits:
-              cpus: '0.5'
+              cpus: '1'
               memory: 512M
 
   customers-db-service:
@@ -56,7 +56,7 @@ services:
     deploy:
         resources:
             limits:
-              cpus: '0.5'
+              cpus: '1'
               memory: 512M
 
   customers-api:
@@ -76,7 +76,7 @@ services:
     deploy:
         resources:
             limits:
-              cpus: '0.5'
+              cpus: '1'
               memory: 512M
 
   creditcard-db-service:
@@ -95,7 +95,7 @@ services:
     deploy:
         resources:
             limits:
-              cpus: '0.5'
+              cpus: '1'
               memory: 512M
 
   creditcard-api:
@@ -116,7 +116,7 @@ services:
     deploy:
         resources:
             limits:
-              cpus: '0.5'
+              cpus: '1'
               memory: 512M
 
   payments-db-service:
@@ -135,7 +135,7 @@ services:
     deploy:
         resources:
             limits:
-              cpus: '0.5'
+              cpus: '1'
               memory: 512M
 
   payments-api:
@@ -156,7 +156,7 @@ services:
     deploy:
         resources:
             limits:
-              cpus: '0.5'
+              cpus: '1'
               memory: 512M
 
 networks:

@@ -96,7 +96,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"cpf\": {{cpf}},\n    \"limite\": 1000,\n    \"numero\": \"1234567890123451\",\n    \"data_validade\": \"12/24\",\n    \"cvv\": \"123\"\n}",
+							"raw": "{\n    \"cpf\": {{cpf}},\n    \"limite\": 1000,\n    \"numero\": \"1234567890123452\",\n    \"data_validade\": \"12/24\",\n    \"cvv\": \"123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -128,7 +128,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"cpf\": {{cpf}},\n    \"numero\": {{cartao_credito_numero}},\n    \"data_validade\": \"12/24\",\n    \"cvv\": \"123\",\n    \"valor\": 300.00\n}",
+							"raw": "{\n    \"cpf\": {{cpf}},\n    \"numero\": {{cartao_credito_numero}},\n    \"data_validade\": \"12/24\",\n    \"cvv\": \"123\",\n    \"valor\": 100.00\n}",
 							"options": {
 								"raw": {
 									"language": "json"

@@ -37,6 +37,17 @@ public final class PaymentsTestData {
         DEFAULT_PAYMENT_VALUE, DEFAULT_PAYMENT_STATUS_APROVADO);
   }
 
+  public static PaymentSchema createNewPaymentSchema(Payment payment) {
+    return PaymentSchema.builder()
+        .cpf(DEFAULT_PAYMENT_CPF)
+        .number(DEFAULT_PAYMENT_CREDIT_CARD_NUMBER)
+        .expirationDate(DEFAULT_PAYMENT_CREDIT_CARD_EXPIRATION_DATE)
+        .cvv(DEFAULT_PAYMENT_CREDIT_CARD_CVV)
+        .value(new BigDecimal(DEFAULT_PAYMENT_VALUE))
+        .status(DEFAULT_PAYMENT_STATUS_APROVADO)
+        .build();
+  }
+
   public static PaymentSchema createPaymentSchema(Payment payment) {
     return PaymentSchema.builder()
         .id(DEFAULT_PAYMENT_UUID)

@@ -80,7 +80,7 @@ O backend foi implementado seguindo as recomendações da Clean Architecture, co
   - os containers com banco de dados estão acessíveis apenas por seu respectivo microsserviço.
   - neste projeto, a **interface da aplicação** é o Postman.
 
-![alt text](./img/comunicacao_entre_microsservicos.png)
+![alt text](./img/comunicacao_entre_microsservicos2.png)
 
 # Microsserviço de usuários - API
 O objetivo deste microsserviço é realizar a autenticação do usuário e fornecer um JWT token de acesso. O cadastro do usuário será realizado via flyway migration, inserindo o usuário sugerido pelos professores.
@@ -271,12 +271,12 @@ O objetivo deste microsserviço é realizar o registro de pagamentos de compras 
             * Solicitar ao microsserviço de cartão de crédito a atualização do saldo do limite do cliente;
         * Http response status do endpoint:
             * Status: 200 para pagamento realizado com sucesso;
-            * Status: 401 para erro de autorização;
+            * Status: 401 para erro de autenticação;
             * Status: 402 para caso o limite do cartão foi superado;
             * Status: 500 para um erro de negócio.
 
 * http://localhost:8083/api/pagamentos/cliente/{cpf}
-    * Verbo GET - para realizar a pesquisa de pagamentos pelo CPF do cliente. 
+    * Verbo GET - para realizar a pesquisa de pagamentos pelo CPF do cliente.
         * Escopo: privado, requer autenticação.
         * Retorno:
 
@@ -300,11 +300,11 @@ Foi utilizado no projeto o flyway para criar a tabela de banco de dados.
 
 # Microsserviço de registro de pagamentos - Resultado dos testes
 
-135 testes de integração e unidade, executados em 2 segudos, com 100% de classes e 91% de linhas de código cobertas.
+144 testes de integração e unidade, executados em 2 segudos, com 100% de classes e 91% de linhas de código cobertas.
 
-O microsserviço de pagamentos realiza uma comunicação com o microsserviço de clientes e o microsserviço de cartões de crédito, para verificar se o cartão de crédito/CPF existe. Esta comunicação poderia influenciar nos testes de integração, pois este realiza um teste iniciando do endpoint, passando pelas camadas internas da aplicação, realiza uma operação no banco de dados e por fim faz todo o caminho de volta, retornando o resultado do consumo do endpoint. Para que o teste seja independente do microsserviço de clientes e de cartões de crédito, foi utilizado o WireMock no teste de integração para simular o microsserviço de clientes, sem que este esteja ativo.
+O microsserviço de pagamentos realiza uma comunicação com o microsserviço de cartões de crédito, para verificar se o cartão de crédito/CPF existe. Esta comunicação poderia influenciar nos testes de integração, pois este realiza um teste iniciando do endpoint, passando pelas camadas internas da aplicação, realiza uma operação no banco de dados e por fim faz todo o caminho de volta, retornando o resultado do consumo do endpoint. Para que o teste seja independente do microsserviço de cartões de crédito, foi utilizado o WireMock no teste de integração para simular o endpoint do microsserviço de cartões de crédito, sem que este esteja ativo.
 
-![alt text](./img/cartaocredito_cobertura_testes.png)
+![alt text](./img/pagamento_cobertura_testes.png)
 
 # Clean Architecture
 

@@ -50,8 +50,8 @@ public interface CreditCardsApi {
   })
   CreditCardOutputDto getCreditCardByNumberAndCustomerCpf(String number, String cpf);
 
-  @Operation(summary = "Atualiza o cartão de crédito",
-      description = "Endpoint para atualizar dados de um cartão de crédito",
+  @Operation(summary = "Atualiza o limite do cartão de crédito",
+      description = "Endpoint para atualizar o limite do cartão de crédito",
       tags = {"CreditCardsApi"})
   @ApiResponses(value = {
       @ApiResponse(responseCode = "202", description = "successful operation", content = {

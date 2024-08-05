@@ -5,6 +5,7 @@ import br.com.fiap.payments.domain.entity.Payment;
 import br.com.fiap.payments.infrastructure.repository.PaymentSchemaRepository;
 import br.com.fiap.payments.infrastructure.schema.PaymentSchema;
 import java.math.BigDecimal;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,6 +22,12 @@ public class PaymentSchemaGateway implements PaymentGateway {
     var paymentSchema = createNewPaymentSchemaFrom(payment);
     var paymentSchemaSaved = paymentSchemaRepository.save(paymentSchema);
     return getPaymentFrom(paymentSchemaSaved);
+  }
+
+  @Override
+  public List<Payment> findByCpf(String cpf) {
+    var payments = paymentSchemaRepository.findByCpf(cpf);
+    return payments.stream().map(this::getPaymentFrom).toList();
   }
 
   private PaymentSchema createNewPaymentSchemaFrom(Payment payment) {

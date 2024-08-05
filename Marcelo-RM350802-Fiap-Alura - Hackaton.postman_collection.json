@@ -1,0 +1,188 @@
+{
+	"info": {
+		"_postman_id": "e7247ec1-d094-44b2-befa-c789fd73ca76",
+		"name": "Fiap/Alura - Hackaton",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "9250904"
+	},
+	"item": [
+		{
+			"name": "00 - Autenticate",
+			"item": [
+				{
+					"name": "01 - POST authenticate",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"usuario\": \"adj2\",\n    \"senha\": \"adj@1234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url-authenticate}}/api/autenticacao"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "01 - Cliente",
+			"item": [
+				{
+					"name": "01 - Criar novo cliente",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"cpf\": \"72558826760\",\n    \"nome\": \"João da Silva\",\n    \"email\": \"joaodasilva@hackatonfiapadjt2.com.br\",\n    \"telefone\": \"5511912345678\",\n    \"rua\": \"Rua A\",\n    \"cidade\": \"São Paulo\",\n    \"estado\": \"São Paulo\",\n    \"pais\": \"Brasil\",\n    \"cep\": \"12345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url-customer}}/api/cliente"
+					},
+					"response": []
+				},
+				{
+					"name": "02 - Recupera cliente por cpf",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url-customer}}/api/cliente/{{cpf}}"
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "02 - Cartão de crédito",
+			"item": [
+				{
+					"name": "01 - Cadastra cartão de crédito",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"cpf\": {{cpf}},\n    \"limite\": 1000,\n    \"numero\": \"1234567890123451\",\n    \"data_validade\": \"12/24\",\n    \"cvv\": \"123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url-creditcard}}/api/cartao"
+					},
+					"response": []
+				},
+				{
+					"name": "02 - Recupera um cartão de crédito por número e cpf",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url-creditcard}}/api/cartao/{{cartao_credito_numero}}/cliente/{{cpf}}"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pagamentos",
+			"item": [
+				{
+					"name": "01 - Registra o pagamento de uma compra",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"cpf\": {{cpf}},\n    \"numero\": {{cartao_credito_numero}},\n    \"data_validade\": \"12/24\",\n    \"cvv\": \"123\",\n    \"valor\": 300.00\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url-payment}}/api/pagamentos"
+					},
+					"response": []
+				},
+				{
+					"name": "02 - Recupera uma lista de pagamentos por cliente",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url-payment}}/api/pagamentos/cliente/{{cpf}}"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": {
+			"token": "{{auth_token}}"
+		}
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"value": "",
+			"type": "string"
+		}
+	]
+}

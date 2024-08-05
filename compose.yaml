@@ -12,6 +12,8 @@ services:
       - 5432:5432
     volumes:
       - /var/lib/postgres
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro      
     networks:
       - hackaton-postgres-network
     deploy:
@@ -32,6 +34,9 @@ services:
       spring.datasource.url: jdbc:postgresql://user-db-service/users-db
       spring.datasource.username: users-postgres-user
       spring.datasource.password: users-postgres-pwd
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro      
     networks:
       - hackaton-postgres-network
     deploy:
@@ -51,6 +56,8 @@ services:
       - 5433:5432
     volumes:
       - /var/lib/postgres
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro      
     networks:
       - hackaton-postgres-network
     deploy:
@@ -67,6 +74,9 @@ services:
       - customers-db-service
     ports:
       - "8081:8081"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro      
     environment:
       spring.datasource.url: jdbc:postgresql://customers-db-service/customers-db
       spring.datasource.username: customer-postgres-user
@@ -90,6 +100,8 @@ services:
       - 5434:5432
     volumes:
       - /var/lib/postgres
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro      
     networks:
       - hackaton-postgres-network
     deploy:
@@ -106,6 +118,9 @@ services:
       - creditcard-db-service
     ports:
       - "8082:8082"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro      
     environment:
       spring.datasource.url: jdbc:postgresql://creditcard-db-service/creditcard-db
       spring.datasource.username: creditcard-postgres-user
@@ -130,6 +145,8 @@ services:
       - 5435:5432
     volumes:
       - /var/lib/postgres
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro      
     networks:
       - hackaton-postgres-network
     deploy:
@@ -146,6 +163,9 @@ services:
       - payments-db-service
     ports:
       - "8083:8083"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro      
     environment:
       spring.datasource.url: jdbc:postgresql://payments-db-service/payments-db
       spring.datasource.username: payments-postgres-user

@@ -320,3 +320,17 @@ Observe que as classes contidas na camada *Presentation* não conhecem as classe
 Para garantir a qualidade de software, foram implementados testes de unidade e de integração na grande maioria do código e teste de design arquitetural do projeto com o ArchUnit. Para identificar o que foi testado, utilizamos a cobertura de testes de código do próprio IntelliJ IDEA e o ArchUnit. O ArchUnit foi utilizado para identificar através de um teste a existência de testes correspondentes para as classes de serviço, use case, validators, identifica se as classes foram criadas respeitando a arquitetura/design do projeto (cada classe deverá ser criada em sua respectiva pasta, conforme seu objetivo, não é permitido injetar repositories em classes indevidas, métodos de use case que executam operações de escrita em banco de dados devem ser anotadas com @Transactional).
 Os testes de unidade foram implementados nas classes de domínio e application testando a menor unidade de código. Os testes de integração foram implementados nas classes de presentation, realizando a requisição HTTP aos endpoints em diversos cenários, testando o código por completo, da entrada dos dados, processamento e saída. O objetivo desta segregação foi considerar a eficiência dos testes versus o tempo de entrega do projeto. Aplicando este método, foi apurado pela cobertuda de testes do IntelliJ IDEA, em mais de 90% de classes testadas na maioria dos microserviços. O grande número de testes é justificado pela arquitetura do projeto, onde está sendo implementada a Clean Archtecture, com a utilização de entidades/value objects e o princípio SOLID, YAGNI e KISS. Para realizar o teste de cobertura, clique com o botão direito do mouse sobre o nome do projeto, navegue até a opção More Run/Debug, em seguida selecione a opção Run tests in <nome do projeto> with Coverage.
 As comunicações dentre microsserviços foram mockadas nos testes de integração, com a utilização do WireMock, para que os testes se mantenham independentes, porém contemplando os cenários pertinentes a esta comunicação e considerando o princípio de testes FIRST.
+
+# Infraestrutura
+Para subir as aplicações, basta executar um único docker compose, que se encontra na pasta raiz do projeto.
+
+![alt text](./img/hackaton_docker_compose.png)
+
+Todas as aplicações e bancos de dados possuem seu container específico, com o limite de 512MB de memória solicitado no hackaton.
+
+![alt text](./img/hackaton_containers_limit_memory_usage.png)
+
+# Referências
+- Apostilas de Clean Architecture professor Erick Muller, 2024.
+- MARTIN, R. Clean Code: A Handbook of Agile Software Craftsmanship. [s.l.]:Pearson, 2008.
+- Criando um projeto Spring Boot com Arquitetura Limpa. Disponível em: <https://www.youtube.com/watch?v=hit0XHGt4WI>. Acesso em: 30 de julho. 2024.

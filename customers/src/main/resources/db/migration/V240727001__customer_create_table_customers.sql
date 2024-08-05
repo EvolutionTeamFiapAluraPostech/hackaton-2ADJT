@@ -17,5 +17,5 @@ create table if not exists "customer_management"."customers"
     "city"         varchar(100)                null,
     "state"        varchar(100)                null,
     "country"      varchar(100)                null,
-    "postal_code"  varchar(8)                  null
+    "postal_code"  varchar(9)                  null
 );

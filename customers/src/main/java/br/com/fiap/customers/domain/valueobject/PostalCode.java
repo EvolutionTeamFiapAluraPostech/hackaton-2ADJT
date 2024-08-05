@@ -6,10 +6,11 @@ import org.springframework.validation.FieldError;
 
 public class PostalCode {
 
-  public static final Integer POSTAL_CODE_FIELD_MAX_LENGTH = 8;
+  public static final Integer POSTAL_CODE_FIELD_MAX_LENGTH = 9;
   public static final String POSTAL_CODE_MAX_LENGTH_IS_8_YOU_TYPED_MESSAGE = "O tamanho máximo para o CEP é %s. Você informou %s";
   public static final String POSTAL_CODE_ACCEPT_ONLY_NUMBERS = "Informe apenas números para o CEP. Você informou %s";
   private static final String POSTAL_CODE_VALID_FORMAT = "[0-9]*?[1-9][0-9]*";
+  private static final String POSTAL_CODE_SECOND_VALID_FORMAT = "\\d{5}-\\d{3}";
   private static final String POSTAL_CODE_FIELD = "cep";
   private final String postalCodeValue;
 
@@ -23,7 +24,9 @@ public class PostalCode {
     if (postalCodeValue != null && !postalCodeValue.trim().isEmpty()) {
       var validPostalCode = Pattern.compile(POSTAL_CODE_VALID_FORMAT).matcher(postalCodeValue)
           .matches();
-      if (!validPostalCode) {
+      var secondValidPostalCode = Pattern.compile(POSTAL_CODE_SECOND_VALID_FORMAT)
+          .matcher(postalCodeValue).matches();
+      if (!validPostalCode && !secondValidPostalCode) {
         throw new ValidatorException(
             new FieldError(this.getClass().getSimpleName(), POSTAL_CODE_FIELD,
                 POSTAL_CODE_ACCEPT_ONLY_NUMBERS.formatted(postalCodeValue)));

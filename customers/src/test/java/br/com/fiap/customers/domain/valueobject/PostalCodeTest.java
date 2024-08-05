@@ -17,7 +17,7 @@ class PostalCodeTest {
 
   @Test
   void shouldThrowValidatorExceptionWhenPostalCodeMaxLengthIsInvalid() {
-    var postalCodeLength = 9;
+    var postalCodeLength = 10;
     var postalCode = StringUtil.generateStringLength(postalCodeLength);
 
     assertThatThrownBy(() -> new PostalCode(postalCode))

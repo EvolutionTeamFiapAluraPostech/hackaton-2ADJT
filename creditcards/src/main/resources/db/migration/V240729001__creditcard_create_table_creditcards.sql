@@ -11,7 +11,7 @@ create table if not exists "creditcard_management"."credit_cards"
     "updated_by"      varchar(255)                null,
     "cpf"             varchar(11)                 not null,
     "limit_value"     numeric(16, 2)              not null,
-    "number"          varchar(16)                 not null,
+    "number"          varchar(19)                 not null,
     "expiration_date" varchar(5)                  not null,
     "cvv"             varchar(3)                  not null
 );
